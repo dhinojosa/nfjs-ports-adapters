@@ -72,6 +72,8 @@ public class Order {
     }
 
     public int total() {
-        return 0;
+        return orderItemList.stream()
+            .mapToInt(item -> item.price() * item.quantity())
+            .sum();
     }
 }
