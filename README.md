@@ -9,6 +9,9 @@
 4. What IDEs or Editors do you currently use?
 5. What city and time zone are you in?
 6. What do you like to do for zen?
+
    a. Swimming, Running, Hiking
+
    b. Reading, Gardening, Sewing, Kids
+
    c. Board Games, Video Games, Streaming Movies
