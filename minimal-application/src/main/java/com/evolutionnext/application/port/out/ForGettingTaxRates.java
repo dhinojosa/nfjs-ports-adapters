@@ -2,6 +2,6 @@ package com.evolutionnext.application.port.out;//From the book Hexagonal Archite
 
 //From the book Hexagonal Architecture Explained
 
-public interface ForGetttingTaxRates {
+public interface ForGettingTaxRates {
     double taxRate(double amount);
 }
