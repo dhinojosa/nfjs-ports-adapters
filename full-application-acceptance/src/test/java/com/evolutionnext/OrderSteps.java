@@ -9,6 +9,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ScenarioScoped
@@ -36,10 +38,10 @@ public class OrderSteps {
         var entries = dataTable.asMaps();
         System.out.println(entries);
         for (var entry : entries) {
-            long id = Long.parseLong(entry.get("product_id"));
+            UUID productId = UUID.fromString(entry.get("product_id"));
             int quantity = Integer.parseInt(entry.get("quantity"));
             int amount = Integer.parseInt(entry.get("amount"));
-            order.execute(new AddOrderItem(new ProductId(id), quantity, amount));
+            order.addOrderItem(new ProductId(productId), quantity, amount);
         }
     }
 }
