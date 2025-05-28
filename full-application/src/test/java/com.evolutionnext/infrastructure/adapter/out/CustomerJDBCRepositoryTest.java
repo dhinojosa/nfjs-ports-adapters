@@ -7,10 +7,10 @@ import net.jqwik.api.Property;
 import net.jqwik.api.lifecycle.BeforeContainer;
 import net.jqwik.api.lifecycle.BeforeProperty;
 import net.jqwik.api.lifecycle.BeforeTry;
+import net.jqwik.testcontainers.Container;
+import net.jqwik.testcontainers.Testcontainers;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -40,13 +40,6 @@ public class CustomerJDBCRepositoryTest {
         dataSource = pgSimpleDataSource;
     }
 
-    @BeforeProperty
-    void truncateCustomers() throws SQLException {
-        try (Connection conn = dataSource.getConnection();
-             var stmt = conn.createStatement()) {
-            stmt.execute("TRUNCATE TABLE customers");
-        }
-    }
 
     @Property
     void saveAndLoadCustomer(@ForAll(supplier = CustomerArbitrarySupplier.class) Customer customer) throws SQLException {
