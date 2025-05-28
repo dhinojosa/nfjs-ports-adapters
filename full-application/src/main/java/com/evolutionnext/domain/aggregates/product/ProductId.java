@@ -1,5 +1,7 @@
 package com.evolutionnext.domain.aggregates.product;
 
 
-public record ProductId(Long value) {
+import java.util.UUID;
+
+public record ProductId(UUID value) {
 }

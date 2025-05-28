@@ -1,4 +1,6 @@
 package com.evolutionnext.domain.aggregates.order;
 
 
-public record OrderId(Long value) { }
+import java.util.UUID;
+
+public record OrderId(UUID value) { }

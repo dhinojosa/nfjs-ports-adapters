@@ -1,8 +1,5 @@
 package com.evolutionnext.domain.aggregates.customer;
 
 
-public class Customer {
-    public int getCreditLimit() {
-        return 0;
-    }
+public record Customer(CustomerId id, String name, double creditLimit) {
 }

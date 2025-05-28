@@ -1,11 +1,10 @@
 package com.evolutionnext;
 
-import com.evolutionnext.domain.aggregates.order.AddOrderItem;
+import com.evolutionnext.application.port.in.AddOrderItem;
 import com.evolutionnext.domain.aggregates.order.Order;
 import com.evolutionnext.domain.aggregates.product.ProductId;
 import com.google.inject.Inject;
 import io.cucumber.guice.ScenarioScoped;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

@@ -2,25 +2,27 @@ package com.evolutionnext.domain.aggregates.order;
 
 
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
+import com.evolutionnext.domain.aggregates.product.ProductId;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /// Aggregate for Order
 public class Order {
     public static final String CANCELED_STATEMENT = "You can't submit a canceled order";
-    private OrderId orderId;
-    private List<OrderItem> orderItemList;
-    private List<OrderEvent> orderEventList;
-    private CustomerId customer;
+    private final OrderId orderId;
+    private final List<OrderItem> orderItemList;
+    private final List<OrderEvent> orderEventList;
+    private final CustomerId customerId;
 
 
-    protected Order(OrderId orderId, CustomerId customer, ArrayList<OrderEvent> orderEventList) {
+    protected Order(OrderId orderId, CustomerId customerId, ArrayList<OrderEvent> orderEventList) {
         this.orderId = orderId;
         this.orderItemList = new ArrayList<>();
         this.orderEventList = orderEventList;
-        this.customer = customer;
+        this.customerId = customerId;
     }
 
     public static Order of(OrderId orderId, CustomerId customer) {
@@ -29,26 +31,22 @@ public class Order {
         return new Order(orderId, customer, orderEventList);
     }
 
-    public void execute(OrderCommand command) {
-        switch(command) {
-            case CancelOrder cancelOrder -> {
-                orderEventList.add(new OrderCanceled(LocalDateTime.now()));
-            }
-            case SubmitOrder submitOrder -> {
-                switch (getState()) {
-                    case OrderCanceled orderCanceled ->
-                        throw new IllegalStateException(CANCELED_STATEMENT);
-                    default ->
-                        orderEventList.add(new OrderSubmitted(LocalDateTime.now()));
-                }
-            }
-            case AddOrderItem addOrderItem -> {
-                OrderItem orderItem = new OrderItem(
-                    addOrderItem.productId(), addOrderItem.quantity(), addOrderItem.price());
-                orderItemList.add(orderItem);
-                orderEventList.add(new OrderItemAdded(this.orderId, orderItem));
-            }
+    public void cancel() {
+        orderEventList.add(new OrderCanceled(LocalDateTime.now()));
+    }
+
+    public void submit() {
+        if (Objects.requireNonNull(getState()) instanceof OrderCanceled) {
+            throw new IllegalStateException(CANCELED_STATEMENT);
+        } else {
+            orderEventList.add(new OrderSubmitted(LocalDateTime.now()));
         }
+    }
+
+    public void addOrderItem(ProductId productId, int quantity, int price) {
+        OrderItem orderItem = new OrderItem(productId, quantity, price);
+        orderItemList.add(orderItem);
+        orderEventList.add(new OrderItemAdded(this.orderId, orderItem));
     }
 
     public OrderId getOrderId() {
@@ -68,7 +66,7 @@ public class Order {
     }
 
     public CustomerId getCustomerId() {
-        return null;
+        return customerId;
     }
 
     public int total() {

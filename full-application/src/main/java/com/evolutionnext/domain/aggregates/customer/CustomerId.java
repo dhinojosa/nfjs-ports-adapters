@@ -1,5 +1,7 @@
 package com.evolutionnext.domain.aggregates.customer;
 
 
-public record CustomerId(Long id) {
+import java.util.UUID;
+
+public record CustomerId(UUID id) {
 }
