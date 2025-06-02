@@ -8,6 +8,6 @@ Feature: Order Tax Calculations
         When I add the following order items:
             | product_id                           | quantity | amount |
             | 123e4567-e89b-12d3-a456-426614174000 | 2        | 100    |
-            | 987fcdeb-a89b-43d3-b456-426614174001 | 9        | 200    |
+            | 123e4567-e89b-12d3-a456-426614174002 | 9        | 200    |
         Then the total should be 2000
 

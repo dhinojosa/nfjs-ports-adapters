@@ -4,7 +4,6 @@ package com.evolutionnext.infrastructure.adapter.out;
 import com.evolutionnext.application.port.out.OrderRepository;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.*;
-import com.evolutionnext.domain.aggregates.product.ProductId;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,6 +26,7 @@ public class OrderJDBCRepository implements OrderRepository {
                     new CustomerId(UUID.fromString(rs.getString("customer_id"))));
             }
         } catch (SQLException e) {
+            //errorCode is important to bubble up
             throw new RuntimeException(e);
         }
         throw new RuntimeException("Order not found");

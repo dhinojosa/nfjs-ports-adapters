@@ -11,12 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class CustomerJDBCRepository implements CustomerRepository {
 
     @Override
-    public Customer load(CustomerId customerId) {
+    public Optional<Customer> load(CustomerId customerId) {
         try {
             Connection connection = ConnectionScoped.CONNECTION.get();
             String sql = "SELECT * FROM customers WHERE id = ?";
@@ -24,16 +25,16 @@ public class CustomerJDBCRepository implements CustomerRepository {
             preparedStatement.setObject(1, customerId.id());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return new Customer(
+                return Optional.of(new Customer(
                     new CustomerId(resultSet.getObject("id", UUID.class)),
                     resultSet.getString("name"),
                     resultSet.getDouble("credit_limit")
-                );
+                ));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        throw new RuntimeException("Customer not found");
+        return Optional.empty();
     }
 
     @Override
@@ -81,7 +82,7 @@ public class CustomerJDBCRepository implements CustomerRepository {
             Connection connection = ConnectionScoped.CONNECTION.get();
             String sql = "DELETE FROM customers WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, customerId.id().toString());
+            preparedStatement.setObject(1, customerId.id());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
