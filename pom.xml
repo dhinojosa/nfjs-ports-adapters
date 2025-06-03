@@ -28,13 +28,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-bom</artifactId>
-                <version>4.11.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
                 <version>5.9.2</version>
@@ -44,7 +37,7 @@
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
-                <version>1.21.0</version>
+                <version>1.21.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -56,61 +49,35 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-bom</artifactId>
+                <version>2.0.16</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
                 <version>5.1.0</version>
-                <scope>test</scope>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <scope>test</scope>
-            </dependency>
-            <!-- SLF4j dependencies -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>2.0.5</version>
-                <scope>compile</scope>
-            </dependency>
-            <!-- Binding for Log4J -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j2-impl</artifactId>
-                <version>2.20.0</version>
-                <scope>compile</scope>
-            </dependency>
-            <!-- Log4j API and Core implementation required for binding -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>2.20.0</version>
-                <scope>compile</scope>
+                <artifactId>mockito-bom</artifactId>
+                <version>5.14.0</version>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>2.20.0</version>
-                <scope>compile</scope>
+                <artifactId>log4j-bom</artifactId>
+                <version>2.23.1</version>
+                <scope>import</scope>
             </dependency>
             <!-- JQwik Property Testing -->
             <dependency>
                 <groupId>net.jqwik</groupId>
                 <artifactId>jqwik</artifactId>
                 <version>1.7.2</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- Test Containers -->
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>1.20.1</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- PostgresSQL Testcontainer -->
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>postgresql</artifactId>
                 <scope>test</scope>
             </dependency>
             <!-- PostgreSQL Driver -->

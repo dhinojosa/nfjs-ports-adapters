@@ -10,12 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class ProductJDBCRepository implements ProductRepository {
 
     @Override
-    public Product load(ProductId productId) {
+    public Optional<Product> load(ProductId productId) {
         try {
             Connection connection = ConnectionScoped.CONNECTION.get();
             PreparedStatement preparedStatement = connection
@@ -23,16 +24,16 @@ public class ProductJDBCRepository implements ProductRepository {
             preparedStatement.setObject(1, productId.value());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return new Product(
+                return Optional.of(new Product(
                     new ProductId(resultSet.getObject("id", UUID.class)),
                     resultSet.getString("name"),
-                    resultSet.getInt("price")
-                );
+                    resultSet.getBigDecimal("price")
+                ));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        throw new RuntimeException("Product not found");
+        return Optional.empty();
     }
 
     @Override
@@ -40,11 +41,15 @@ public class ProductJDBCRepository implements ProductRepository {
         try {
             Connection connection = ConnectionScoped.CONNECTION.get();
             PreparedStatement preparedStatement = connection
-                .prepareStatement("INSERT INTO products (id, name, price) VALUES (?, ?, ?) " +
-                                  "ON DUPLICATE KEY UPDATE name = VALUES(name), price = VALUES(price)");
+                .prepareStatement("""
+                    INSERT INTO products (id, name, price)
+                        VALUES (?, ?, ?)
+                        ON CONFLICT (id) DO UPDATE
+                        SET name = EXCLUDED.name,
+                            price = EXCLUDED.price""");
             preparedStatement.setObject(1, product.id().value());
             preparedStatement.setString(2, product.name());
-            preparedStatement.setDouble(3, product.price());
+            preparedStatement.setBigDecimal(3, product.price());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -63,7 +68,7 @@ public class ProductJDBCRepository implements ProductRepository {
                 products.add(new Product(
                     new ProductId(resultSet.getObject("id", UUID.class)),
                     resultSet.getString("name"),
-                    resultSet.getInt("price")
+                    resultSet.getBigDecimal("price")
                 ));
             }
             return products;

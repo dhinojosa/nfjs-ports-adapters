@@ -1,16 +1,20 @@
-package com.evolutionnext.domain.order;
+package com.evolutionnext.domain.aggregates.order;
 
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
-import com.evolutionnext.domain.aggregates.order.*;
 import com.evolutionnext.domain.aggregates.product.ProductId;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class OrderTest {
+    private static final Logger logger = LoggerFactory.getLogger(OrderTest.class);
+
     @Test
     void testCreateOrderAggregate() {
         Order order = Order.of(new OrderId(UUID.randomUUID()), new CustomerId(UUID.randomUUID()));
@@ -18,7 +22,7 @@ class OrderTest {
         order.addOrderItem(new ProductId(UUID.randomUUID()), 4, 10);
         order.addOrderItem(new ProductId(UUID.randomUUID()), 1, 120);
 
-        order.getOrderEventList().forEach(System.out::println);
+        order.getOrderEventList().forEach(e -> logger.debug(e.toString()));
     }
 
     @Test
@@ -27,7 +31,8 @@ class OrderTest {
         order.addOrderItem(new ProductId(UUID.randomUUID()), 10, 100);
         order.addOrderItem(new ProductId(UUID.randomUUID()), 4, 10);
         order.addOrderItem(new ProductId(UUID.randomUUID()), 1, 120);
-        order.getOrderEventList().forEach(System.out::println);
+        List<OrderEvent> orderEventList = order.getOrderEventList();
+        assertThat(orderEventList.size()).isEqualTo(4);
 
         order.submit();
         OrderEvent state = order.getState();

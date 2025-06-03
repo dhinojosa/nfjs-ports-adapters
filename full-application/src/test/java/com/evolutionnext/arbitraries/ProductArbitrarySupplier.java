@@ -8,6 +8,7 @@ import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
 import net.jqwik.api.ArbitrarySupplier;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class ProductArbitrarySupplier implements ArbitrarySupplier<Product> {
@@ -16,7 +17,7 @@ public class ProductArbitrarySupplier implements ArbitrarySupplier<Product> {
 
     @Override
     public Arbitrary<Product> get() {
-        return Arbitraries.floats().between(0.0f, 100.0f)
+        return Arbitraries.bigDecimals().between(BigDecimal.ZERO, BigDecimal.valueOf(100))
             .flatMap(price -> Arbitraries.create(UUID::randomUUID)
                 .map(uuid -> new Product(new ProductId(uuid), faker.commerce().productName(), price)));
     }

@@ -1,5 +1,7 @@
 package com.evolutionnext.domain.aggregates.product;
 
 
-public record Product(ProductId id, String name, double price) {
+import java.math.BigDecimal;
+
+public record Product(ProductId id, String name, BigDecimal price) {
 }

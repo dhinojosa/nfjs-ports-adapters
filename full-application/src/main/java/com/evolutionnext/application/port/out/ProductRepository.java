@@ -6,9 +6,10 @@ import com.evolutionnext.domain.aggregates.product.Product;
 import com.evolutionnext.domain.aggregates.product.ProductId;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository {
-    Product load(ProductId productId);
+    Optional<Product> load(ProductId productId);
 
     void save(Product product);
 

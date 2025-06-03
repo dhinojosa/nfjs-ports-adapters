@@ -1,7 +1,7 @@
 package com.evolutionnext.infrastructure.adapter.out;
 
-import com.evolutionnext.arbitraries.CustomerArbitrarySupplier;
-import com.evolutionnext.domain.aggregates.customer.Customer;
+import com.evolutionnext.arbitraries.ProductArbitrarySupplier;
+import com.evolutionnext.domain.aggregates.product.Product;
 import net.jqwik.api.*;
 import net.jqwik.api.Tuple.Tuple2;
 import net.jqwik.api.arbitraries.ListArbitrary;
@@ -10,6 +10,8 @@ import net.jqwik.testcontainers.Container;
 import net.jqwik.testcontainers.Testcontainers;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -21,10 +23,11 @@ import java.util.Random;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
-public class CustomerJDBCRepositoryTest {
+public class ProductJDBCRepositoryTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductJDBCRepositoryTest.class);
     private DataSource dataSource;
-    private final CustomerJDBCRepository customerJDBCRepository = new CustomerJDBCRepository();
+    private final ProductJDBCRepository productJDBCRepository = new ProductJDBCRepository();
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15.2")
@@ -45,16 +48,16 @@ public class CustomerJDBCRepositoryTest {
 
 
     @Property
-    void saveAndLoadCustomer(@ForAll(supplier = CustomerArbitrarySupplier.class) Customer customer) throws SQLException {
+    void saveAndLoadCustomer(@ForAll(supplier = ProductArbitrarySupplier.class) Product product) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            System.out.printf("Testing for customer %s%n", customer);
+            logger.debug("Testing for product {}", product);
             ScopedValue.where(ConnectionScoped.CONNECTION, connection)
                 .run(() -> {
-                    customerJDBCRepository.save(customer);
-                    Optional<Customer> loadedCustomer = customerJDBCRepository.load(customer.id());
-                    assertThat(loadedCustomer).isNotEmpty().contains(customer);
+                    productJDBCRepository.save(product);
+                    Optional<Product> loadedCustomer = productJDBCRepository.load(product.id());
+                    assertThat(loadedCustomer).isNotEmpty().contains(product);
                 });
-            System.out.printf("Completed Testing for customer %s%n", customer);
+            logger.debug("Completed Testing for product {}", product);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -62,26 +65,26 @@ public class CustomerJDBCRepositoryTest {
 
 
     @Provide
-    public Arbitrary<Tuple2<List<Customer>, Customer>> customerListWithSelectionArbitrary() {
-        CustomerArbitrarySupplier customerArbitrarySupplier = new CustomerArbitrarySupplier();
-        ListArbitrary<Customer> customerListArbitrary = customerArbitrarySupplier.get().list().ofMinSize(1).ofMaxSize(10);
+    public Arbitrary<Tuple2<List<Product>, Product>> productListWithSelectionArbitrary() {
+        ProductArbitrarySupplier productArbitrarySupplier = new ProductArbitrarySupplier();
+        ListArbitrary<Product> productListArbitrary = productArbitrarySupplier.get().list().ofMinSize(1).ofMaxSize(10);
         Random random = new Random();
-        return customerListArbitrary.flatMap(customerList -> {
-            Customer selectedCustomer = customerList.get(random.nextInt(customerList.size()));
-            return Arbitraries.of(Tuple.of(customerList, selectedCustomer));
+        return productListArbitrary.flatMap(productList -> {
+            Product selectedProduct = productList.get(random.nextInt(productList.size()));
+            return Arbitraries.of(Tuple.of(productList, selectedProduct));
         });
     }
 
     @Property
-    void deleteCustomer(@ForAll("customerListWithSelectionArbitrary")
-                Tuple2<List<Customer>, Customer> customerEntry) {
+    void deleteProduct(@ForAll("productListWithSelectionArbitrary")
+                Tuple2<List<Product>, Product> productEntry) {
         try (Connection connection = dataSource.getConnection()) {
             ScopedValue.where(ConnectionScoped.CONNECTION, connection)
                 .run(() -> {
-                    List<Customer> customerList = customerEntry.get1();
-                    customerList.forEach(customerJDBCRepository::save);
-                    customerJDBCRepository.delete(customerEntry.get2().id());
-                    Optional<Customer> load = customerJDBCRepository.load(customerEntry.get2().id());
+                    List<Product> productList = productEntry.get1();
+                    productList.forEach(productJDBCRepository::save);
+                    productJDBCRepository.delete(productEntry.get2().id());
+                    Optional<Product> load = productJDBCRepository.load(productEntry.get2().id());
                     assertThat(load).isEmpty();
                 });
         } catch (Exception e) {
@@ -90,13 +93,13 @@ public class CustomerJDBCRepositoryTest {
     }
 
     @Property
-    void deleteAllCustomers(@ForAll List<@From(supplier = CustomerArbitrarySupplier.class) Customer> customerList) throws SQLException {
+    void deleteAllProducts(@ForAll List<@From(supplier = ProductArbitrarySupplier.class) Product> productList) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             ScopedValue.where(ConnectionScoped.CONNECTION, connection)
                 .run(() -> {
-                    customerList.forEach(customerJDBCRepository::save);
-                    customerJDBCRepository.deleteAll();
-                    List<Customer> result = customerJDBCRepository.findAll();
+                    productList.forEach(productJDBCRepository::save);
+                    productJDBCRepository.deleteAll();
+                    List<Product> result = productJDBCRepository.findAll();
                     assertThat(result).hasSize(0);
                 });
         } catch (Exception e) {
