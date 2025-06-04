@@ -9,12 +9,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.UUID;
 
 public class OrderJDBCRepository implements OrderRepository {
 
     @Override
-    public Order load(OrderId orderId) {
+    public Optional<Order> load(OrderId orderId) {
         try {
             Connection connection = ConnectionScoped.CONNECTION.get();
             PreparedStatement ps = connection.prepareStatement(
@@ -22,14 +23,14 @@ public class OrderJDBCRepository implements OrderRepository {
             ps.setString(1, orderId.value().toString());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return Order.of(new OrderId(UUID.fromString(rs.getString("id"))),
-                    new CustomerId(UUID.fromString(rs.getString("customer_id"))));
+                return Optional.of(Order.of(new OrderId(UUID.fromString(rs.getString("id"))),
+                    new CustomerId(UUID.fromString(rs.getString("customer_id")))));
             }
         } catch (SQLException e) {
             //errorCode is important to bubble up
             throw new RuntimeException(e);
         }
-        throw new RuntimeException("Order not found");
+        return Optional.empty();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.evolutionnext.application.port.in;
 
 
+import com.evolutionnext.domain.aggregates.order.OrderId;
+
 public interface ForCustomerPort {
-    void execute(OrderCommand command) throws Exception;
+    OrderId execute(OrderCommand command) throws Exception;
 }

@@ -27,7 +27,6 @@ public class OrderSteps {
     public void aNewOrder(){
     }
 
-
     @Then("the total should be {int}")
     public void theTotalShouldBe(int total) {
         assertThat(order.total()).isEqualTo(total);
