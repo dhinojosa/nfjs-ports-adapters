@@ -1,6 +1,7 @@
 package com.evolutionnext.application.service;
 
 
+import com.evolutionnext.application.commands.order.*;
 import com.evolutionnext.application.port.in.*;
 import com.evolutionnext.application.port.out.CustomerRepository;
 import com.evolutionnext.application.port.out.OrderRepository;
@@ -12,7 +13,7 @@ import com.evolutionnext.domain.services.OrderDomainService;
 
 import java.util.UUID;
 
-public class OrderApplicationService implements ForCustomerPort {
+public class OrderApplicationService implements ForCustomerOrderPort {
 
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;

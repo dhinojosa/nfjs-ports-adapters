@@ -2,6 +2,8 @@ package com.evolutionnext.domain.aggregates.order;
 
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.product.ProductId;
+import com.evolutionnext.domain.events.order.OrderEvent;
+import com.evolutionnext.domain.events.order.OrderSubmitted;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

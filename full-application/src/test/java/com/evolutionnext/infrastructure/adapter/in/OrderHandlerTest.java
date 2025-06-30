@@ -1,8 +1,10 @@
 package com.evolutionnext.infrastructure.adapter.in;
 
+import com.evolutionnext.application.commands.order.*;
 import com.evolutionnext.application.port.in.*;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.OrderId;
+import com.evolutionnext.infrastructure.adapter.HTTPExchangeStub;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -25,7 +28,8 @@ public class OrderHandlerTest {
 
     private ObjectMapper objectMapper;
     private List<OrderCommand> recordedOrders;
-    private ForCustomerPort forCustomerPort;
+    private ForCustomerOrderPort forCustomerPort;
+    private ByteArrayOutputStream responseOutputStream;
 
     @BeforeEach
     void setUp() {
@@ -55,10 +59,14 @@ public class OrderHandlerTest {
             """.formatted(customerId.id().toString());
 
         ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
-        TestHttpExchange testHttpExchange = new
-            TestHttpExchange("POST", requestPayload, responseOutputStream);
 
-        orderHandler.handle(testHttpExchange);
+        var httpExchange = HTTPExchangeStub.builder()
+            .setRequestMethod("POST")
+            .setRequestBody(new ByteArrayInputStream(requestPayload.getBytes()))
+            .setResponseBody(responseOutputStream)
+            .build();
+
+        orderHandler.handle(httpExchange);
 
         assertThat(recordedOrders).hasSize(1);
 

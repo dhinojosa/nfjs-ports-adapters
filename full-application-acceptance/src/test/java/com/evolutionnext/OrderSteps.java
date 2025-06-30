@@ -1,6 +1,5 @@
 package com.evolutionnext;
 
-import com.evolutionnext.application.port.in.AddOrderItem;
 import com.evolutionnext.domain.aggregates.order.Order;
 import com.evolutionnext.domain.aggregates.product.ProductId;
 import com.google.inject.Inject;

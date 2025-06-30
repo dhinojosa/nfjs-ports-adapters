@@ -1,7 +1,6 @@
-package com.evolutionnext.application.port.in;
+package com.evolutionnext.application.commands.order;
 
 
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
-import com.evolutionnext.domain.aggregates.order.OrderId;
 
 public record InitializeOrder(CustomerId customerId) implements OrderCommand { }

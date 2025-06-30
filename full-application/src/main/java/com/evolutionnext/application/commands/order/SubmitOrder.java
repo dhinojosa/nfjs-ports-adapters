@@ -1,4 +1,4 @@
-package com.evolutionnext.application.port.in;
+package com.evolutionnext.application.commands.order;
 
 
 import com.evolutionnext.domain.aggregates.order.OrderId;

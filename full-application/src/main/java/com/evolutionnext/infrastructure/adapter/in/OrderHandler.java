@@ -1,8 +1,8 @@
 package com.evolutionnext.infrastructure.adapter.in;
 
 
-import com.evolutionnext.application.port.in.ForCustomerPort;
-import com.evolutionnext.application.port.in.InitializeOrder;
+import com.evolutionnext.application.port.in.ForCustomerOrderPort;
+import com.evolutionnext.application.commands.order.InitializeOrder;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.Order;
 import com.evolutionnext.domain.aggregates.order.OrderId;
@@ -20,10 +20,10 @@ import java.util.UUID;
 public class OrderHandler implements HttpHandler {
     private static final Logger logger = LoggerFactory.getLogger(OrderHandler.class);
 
-    private final ForCustomerPort forCustomerPort;
+    private final ForCustomerOrderPort forCustomerPort;
     private final ObjectMapper objectMapper;
 
-    public OrderHandler(ForCustomerPort forCustomerPort, ObjectMapper objectMapper) {
+    public OrderHandler(ForCustomerOrderPort forCustomerPort, ObjectMapper objectMapper) {
         this.forCustomerPort = forCustomerPort;
         this.objectMapper = objectMapper;
     }

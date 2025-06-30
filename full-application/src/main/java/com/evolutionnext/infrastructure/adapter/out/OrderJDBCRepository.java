@@ -4,6 +4,7 @@ package com.evolutionnext.infrastructure.adapter.out;
 import com.evolutionnext.application.port.out.OrderRepository;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.*;
+import com.evolutionnext.domain.events.order.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
