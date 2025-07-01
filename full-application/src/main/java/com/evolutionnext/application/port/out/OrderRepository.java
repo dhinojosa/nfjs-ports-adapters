@@ -7,11 +7,8 @@ import java.util.Optional;
 
 public interface OrderRepository {
     Optional<Order> load(OrderId orderId);
-
     void save(Order order);
-
     void delete(OrderId orderId);
-
     void deleteAll();
 }
 

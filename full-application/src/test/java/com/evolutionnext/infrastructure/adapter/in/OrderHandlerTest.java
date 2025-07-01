@@ -2,6 +2,10 @@ package com.evolutionnext.infrastructure.adapter.in;
 
 import com.evolutionnext.application.commands.order.*;
 import com.evolutionnext.application.port.in.*;
+import com.evolutionnext.application.results.order.OrderCanceled;
+import com.evolutionnext.application.results.order.OrderCreated;
+import com.evolutionnext.application.results.order.OrderItemAdded;
+import com.evolutionnext.application.results.order.OrderSubmitted;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.OrderId;
 import com.evolutionnext.infrastructure.adapter.HTTPExchangeStub;
@@ -39,10 +43,10 @@ public class OrderHandlerTest {
         forCustomerPort = command -> {
             recordedOrders.add(command);
             return switch (command) {
-                case AddOrderItem addOrderItem -> addOrderItem.orderId();
-                case CancelOrder cancelOrder -> cancelOrder.orderId();
-                case InitializeOrder _ -> new OrderId(UUID.randomUUID());
-                case SubmitOrder submitOrder -> submitOrder.orderId();
+                case AddOrderItem addOrderItem -> new OrderItemAdded(addOrderItem.orderId(), List.of());
+                case CancelOrder cancelOrder -> new OrderCanceled(cancelOrder.orderId());
+                case InitializeOrder _ -> new OrderCreated(new OrderId(UUID.randomUUID()));
+                case SubmitOrder submitOrder -> new OrderSubmitted(submitOrder.orderId());
             };
         };
     }

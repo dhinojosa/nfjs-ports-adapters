@@ -3,6 +3,7 @@ package com.evolutionnext.infrastructure.adapter.in;
 
 import com.evolutionnext.application.port.in.ForCustomerOrderPort;
 import com.evolutionnext.application.commands.order.InitializeOrder;
+import com.evolutionnext.application.results.order.OrderResult;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.Order;
 import com.evolutionnext.domain.aggregates.order.OrderId;
@@ -43,8 +44,9 @@ public class OrderHandler implements HttpHandler {
                     new InitializeOrder(new CustomerId(UUID.fromString(orderRequest.customerId)));
 
                 logger.debug("Executing command {}", initializeOrder);
-                OrderId orderId = forCustomerPort.execute(initializeOrder);
-                logger.debug("Executed command {} and received id {}", initializeOrder, orderId);
+                OrderResult orderResult = forCustomerPort.execute(initializeOrder);
+
+                logger.debug("Executed command {} and received id {}", initializeOrder, orderResult);
 
                 String response = objectMapper.writeValueAsString(order);
                 exchange.getResponseHeaders().set("Content-Type", "application/json");

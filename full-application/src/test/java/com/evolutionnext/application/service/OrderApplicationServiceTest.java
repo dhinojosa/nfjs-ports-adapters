@@ -6,10 +6,12 @@ import com.evolutionnext.application.commands.order.InitializeOrder;
 import com.evolutionnext.application.port.out.CustomerRepository;
 import com.evolutionnext.application.port.out.OrderRepository;
 import com.evolutionnext.application.port.out.Transactional;
+import com.evolutionnext.application.results.order.OrderCanceled;
+import com.evolutionnext.application.results.order.OrderItemAdded;
+import com.evolutionnext.application.results.order.OrderResult;
 import com.evolutionnext.domain.aggregates.customer.Customer;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.Order;
-import com.evolutionnext.domain.events.order.OrderCanceled;
 import com.evolutionnext.domain.aggregates.order.OrderId;
 import com.evolutionnext.domain.aggregates.product.ProductId;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,8 +101,8 @@ class OrderApplicationServiceTest {
         InitializeOrder command = new InitializeOrder(customerId);
 
         // Act
-        OrderId result = service.execute(command);
-        assertThat(result).isNotNull();
+        OrderResult orderResult = service.execute(command);
+        assertThat(orderResult).isNotNull();
     }
 
     @Test
@@ -120,16 +122,14 @@ class OrderApplicationServiceTest {
         AddOrderItem command = new AddOrderItem(orderId, productId, 2, 100);
 
         // Act
-        OrderId result = service.execute(command);
+        OrderResult result = service.execute(command);
 
         // Assert
-        assertThat(result).isEqualTo(orderId);
+        assertThat(result).isInstanceOf(OrderItemAdded.class);
         Optional<Order> loadedOrder = inMemoryOrderRepository.load(orderId);
         assertThat(loadedOrder).isPresent();
         assertThat(loadedOrder.get().total()).isEqualTo(200);
     }
-
-
 
     @Test
     void shouldThrowExceptionWhenAddingItemToNonExistentOrder() {
@@ -193,106 +193,12 @@ class OrderApplicationServiceTest {
         CancelOrder command = new CancelOrder(orderId);
 
         // Act
-        OrderId result = service.execute(command);
+        OrderResult result = service.execute(command);
 
         // Assert
-        assertThat(result).isEqualTo(orderId);
+        assertThat(result).isInstanceOf(OrderCanceled.class);
         Optional<Order> loadedOrder = inMemoryOrderRepository.load(orderId);
         assertThat(loadedOrder).isPresent();
-        assertThat(loadedOrder.get().getState()).isInstanceOf(OrderCanceled.class);
+        assertThat(loadedOrder.get().getState()).isInstanceOf(com.evolutionnext.domain.events.order.OrderCanceled.class);
     }
-
-
-//    @Test
-//    void shouldCancelOrderSuccessfully() {
-//        // Arrange
-//        OrderRepository orderRepository = mock(OrderRepository.class);
-//        CustomerRepository customerRepository = mock(CustomerRepository.class);
-//        Transactional transactional = mock(Transactional.class);
-//        OrderApplicationService service = new OrderApplicationService(orderRepository, customerRepository, transactional);
-//
-//        UUID orderIdValue = UUID.randomUUID();
-//        OrderId orderId = new OrderId(orderIdValue);
-//        Order existingOrder = mock(Order.class);
-//
-//        OrderCommand.CancelOrder command = new OrderCommand.CancelOrder(orderId);
-//
-//        when(orderRepository.load(orderId)).thenReturn(Optional.of(existingOrder));
-//        when(transactional.transactionally(any())).thenAnswer(invocation -> {
-//            var transactionalFunction = invocation.getArgument(0, Transactional.TransactionalFunction.class);
-//            return transactionalFunction.apply();
-//        });
-//
-//        // Act
-//        OrderId result = service.execute(command);
-//
-//        // Assert
-//        assertEquals(orderId, result);
-//        verify(existingOrder, times(1)).cancel();
-//        verify(orderRepository, times(1)).save(existingOrder);
-//    }
-//
-//    @Test
-//    void shouldSubmitOrderSuccessfully() {
-//        // Arrange
-//        OrderRepository orderRepository = mock(OrderRepository.class);
-//        CustomerRepository customerRepository = mock(CustomerRepository.class);
-//        Transactional transactional = mock(Transactional.class);
-//        OrderApplicationService service = new OrderApplicationService(orderRepository, customerRepository, transactional);
-//
-//        UUID orderIdValue = UUID.randomUUID();
-//        OrderId orderId = new OrderId(orderIdValue);
-//        UUID customerId = UUID.randomUUID();
-//        Order order = mock(Order.class);
-//        Customer customer = mock(Customer.class);
-//
-//        OrderCommand.SubmitOrder command = new OrderCommand.SubmitOrder(orderId);
-//
-//        when(orderRepository.load(orderId)).thenReturn(Optional.of(order));
-//        when(customerRepository.load(customerId)).thenReturn(Optional.of(customer));
-//        when(transactional.transactionally(any())).thenAnswer(invocation -> {
-//            var transactionalFunction = invocation.getArgument(0, Transactional.TransactionalFunction.class);
-//            return transactionalFunction.apply();
-//        });
-//        when(order.getCustomerId()).thenReturn(customerId);
-//        when(OrderDomainService.checkCredit(order, customer)).thenReturn(true);
-//
-//        // Act
-//        OrderId result = service.execute(command);
-//
-//        // Assert
-//        assertEquals(orderId, result);
-//        verify(order, times(1)).submit();
-//        verify(orderRepository, times(1)).save(order);
-//    }
-//
-//    @Test
-//    void shouldThrowExceptionWhenInsufficientCreditForSubmitOrder() {
-//        // Arrange
-//        OrderRepository orderRepository = mock(OrderRepository.class);
-//        CustomerRepository customerRepository = mock(CustomerRepository.class);
-//        Transactional transactional = mock(Transactional.class);
-//        OrderApplicationService service = new OrderApplicationService(orderRepository, customerRepository, transactional);
-//
-//        UUID orderIdValue = UUID.randomUUID();
-//        OrderId orderId = new OrderId(orderIdValue);
-//        UUID customerId = UUID.randomUUID();
-//        Order order = mock(Order.class);
-//        Customer customer = mock(Customer.class);
-//
-//        OrderCommand.SubmitOrder command = new OrderCommand.SubmitOrder(orderId);
-//
-//        when(orderRepository.load(orderId)).thenReturn(Optional.of(order));
-//        when(customerRepository.load(customerId)).thenReturn(Optional.of(customer));
-//        when(transactional.transactionally(any())).thenAnswer(invocation -> {
-//            var transactionalFunction = invocation.getArgument(0, Transactional.TransactionalFunction.class);
-//            return transactionalFunction.apply();
-//        });
-//        when(order.getCustomerId()).thenReturn(customerId);
-//        when(OrderDomainService.checkCredit(order, customer)).thenReturn(false);
-//
-//        // Act & Assert
-//        RuntimeException exception = assertThrows(RuntimeException.class, () -> service.execute(command));
-//        assertEquals("Insufficient credit", exception.getMessage());
-//    }
 }
