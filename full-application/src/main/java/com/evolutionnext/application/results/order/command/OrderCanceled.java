@@ -1,12 +1,10 @@
-package com.evolutionnext.application.results.order;
+package com.evolutionnext.application.results.order.command;
 
 import com.evolutionnext.domain.aggregates.order.OrderId;
-
-import java.util.UUID;
 
 /*
  *  Cancel Order
  *   - DELETE http://localhost:8080/order/{orderId}
  *   - Response: { "orderId": "uuid"}
  */
-public record OrderCanceled(OrderId orderId) implements OrderResult {}
+public record OrderCanceled(OrderId orderId) implements ClientOrderResult, AdminOrderResult {}

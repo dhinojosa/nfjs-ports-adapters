@@ -1,4 +1,4 @@
-package com.evolutionnext.application.results.order;
+package com.evolutionnext.application.results.order.command;
 
 
 import com.evolutionnext.domain.aggregates.order.OrderId;
@@ -13,5 +13,5 @@ import java.util.List;
  * - Request: { "productId": "uuid", "quantity": number }
  * - Response: { "orderId": "uuid", "items": [] }
  */
-public record OrderItemAdded(OrderId orderId, List<OrderItem> items) implements OrderResult {
+public record OrderItemAdded(OrderId orderId, List<OrderItem> items) implements ClientOrderResult {
 }

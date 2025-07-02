@@ -1,4 +1,4 @@
-package com.evolutionnext.application.results.order;
+package com.evolutionnext.application.results.order.command;
 
 /*
  * Submit Order
@@ -9,4 +9,4 @@ package com.evolutionnext.application.results.order;
 
 import com.evolutionnext.domain.aggregates.order.OrderId;
 
-public record OrderSubmitted (OrderId orderId) implements OrderResult {}
+public record OrderSubmitted (OrderId orderId) implements ClientOrderResult {}

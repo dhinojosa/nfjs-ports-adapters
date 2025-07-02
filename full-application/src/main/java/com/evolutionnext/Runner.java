@@ -1,10 +1,10 @@
 package com.evolutionnext;
 
-import com.evolutionnext.application.port.in.ForCustomerOrderPort;
+import com.evolutionnext.application.port.in.order.ForClientOrderCommandPort;
 import com.evolutionnext.application.port.out.CustomerRepository;
 import com.evolutionnext.application.port.out.OrderRepository;
 import com.evolutionnext.application.port.out.ProductRepository;
-import com.evolutionnext.application.service.OrderApplicationService;
+import com.evolutionnext.application.service.order.OrderCommandApplicationService;
 import com.evolutionnext.infrastructure.adapter.in.MyWebServer;
 import com.evolutionnext.infrastructure.adapter.in.OrderHandler;
 import com.evolutionnext.infrastructure.adapter.out.CustomerJDBCRepository;
@@ -49,10 +49,10 @@ public class Runner {
         CustomerRepository customerRepository = new CustomerJDBCRepository();
         OrderRepository orderRepository = new OrderJDBCRepository();
         ProductRepository productRepository = new ProductJDBCRepository();
-        ForCustomerOrderPort forCustomerOrderPort = new OrderApplicationService(orderRepository,
+        ForClientOrderCommandPort forClientOrderCommandPort = new OrderCommandApplicationService(orderRepository,
             customerRepository, jdbcTransactional);
 
-        OrderHandler orderHandler = new OrderHandler(forCustomerOrderPort, new ObjectMapper());
+        OrderHandler orderHandler = new OrderHandler(forClientOrderCommandPort, new ObjectMapper());
         return new MyWebServer(orderHandler);
     }
 

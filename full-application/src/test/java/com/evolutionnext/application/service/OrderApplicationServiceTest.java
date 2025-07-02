@@ -3,12 +3,14 @@ package com.evolutionnext.application.service;
 import com.evolutionnext.application.commands.order.AddOrderItem;
 import com.evolutionnext.application.commands.order.CancelOrder;
 import com.evolutionnext.application.commands.order.InitializeOrder;
+import com.evolutionnext.application.port.in.order.ForAdminOrderCommandPort;
 import com.evolutionnext.application.port.out.CustomerRepository;
 import com.evolutionnext.application.port.out.OrderRepository;
 import com.evolutionnext.application.port.out.Transactional;
-import com.evolutionnext.application.results.order.OrderCanceled;
-import com.evolutionnext.application.results.order.OrderItemAdded;
-import com.evolutionnext.application.results.order.OrderResult;
+import com.evolutionnext.application.results.order.command.OrderCanceled;
+import com.evolutionnext.application.results.order.command.OrderItemAdded;
+import com.evolutionnext.application.results.order.command.OrderResult;
+import com.evolutionnext.application.service.order.OrderCommandApplicationService;
 import com.evolutionnext.domain.aggregates.customer.Customer;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.Order;
@@ -93,8 +95,8 @@ class OrderApplicationServiceTest {
 
     @Test
     void shouldInitializeOrderSuccessfully() {
-        OrderApplicationService service = new
-            OrderApplicationService(inMemoryOrderRepository,
+        OrderCommandApplicationService service = new
+            OrderCommandApplicationService(inMemoryOrderRepository,
             inMemoryCustomerRepository, passthroughTransactional);
 
         CustomerId customerId = new CustomerId(UUID.randomUUID());
@@ -108,8 +110,8 @@ class OrderApplicationServiceTest {
     @Test
     void shouldAddOrderItemSuccessfully() {
         // Arrange
-        OrderApplicationService service = new
-            OrderApplicationService(inMemoryOrderRepository,
+        OrderCommandApplicationService service = new
+            OrderCommandApplicationService(inMemoryOrderRepository,
             inMemoryCustomerRepository,
             passthroughTransactional);
 
@@ -134,7 +136,7 @@ class OrderApplicationServiceTest {
     @Test
     void shouldThrowExceptionWhenAddingItemToNonExistentOrder() {
         // Arrange
-        OrderApplicationService service = new OrderApplicationService(
+        OrderCommandApplicationService service = new OrderCommandApplicationService(
             inMemoryOrderRepository,
             inMemoryCustomerRepository,
             passthroughTransactional);
@@ -152,7 +154,7 @@ class OrderApplicationServiceTest {
     @Test
     void shouldAddMultipleOrderItemsSuccessfully() {
         // Arrange
-        OrderApplicationService service = new OrderApplicationService(
+        OrderCommandApplicationService service = new OrderCommandApplicationService(
             inMemoryOrderRepository,
             inMemoryCustomerRepository,
             passthroughTransactional);
@@ -180,7 +182,7 @@ class OrderApplicationServiceTest {
     @Test
     void shouldCancelOrderSuccessfully() {
         // Arrange
-        OrderApplicationService service = new OrderApplicationService(
+        ForAdminOrderCommandPort service = new OrderCommandApplicationService(
             inMemoryOrderRepository,
             inMemoryCustomerRepository,
             passthroughTransactional);

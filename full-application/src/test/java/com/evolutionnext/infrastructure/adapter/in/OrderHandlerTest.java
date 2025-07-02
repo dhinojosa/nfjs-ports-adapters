@@ -1,11 +1,11 @@
 package com.evolutionnext.infrastructure.adapter.in;
 
 import com.evolutionnext.application.commands.order.*;
-import com.evolutionnext.application.port.in.*;
-import com.evolutionnext.application.results.order.OrderCanceled;
-import com.evolutionnext.application.results.order.OrderCreated;
-import com.evolutionnext.application.results.order.OrderItemAdded;
-import com.evolutionnext.application.results.order.OrderSubmitted;
+import com.evolutionnext.application.port.in.order.ForClientOrderCommandPort;
+import com.evolutionnext.application.results.order.command.OrderCanceled;
+import com.evolutionnext.application.results.order.command.OrderCreated;
+import com.evolutionnext.application.results.order.command.OrderItemAdded;
+import com.evolutionnext.application.results.order.command.OrderSubmitted;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.OrderId;
 import com.evolutionnext.infrastructure.adapter.HTTPExchangeStub;
@@ -32,7 +32,7 @@ public class OrderHandlerTest {
 
     private ObjectMapper objectMapper;
     private List<OrderCommand> recordedOrders;
-    private ForCustomerOrderPort forCustomerPort;
+    private ForClientOrderCommandPort forCustomerPort;
     private ByteArrayOutputStream responseOutputStream;
 
     @BeforeEach

@@ -1,4 +1,4 @@
-package com.evolutionnext.application.results.product;
+package com.evolutionnext.application.results.product.command;
 
 
 import com.evolutionnext.domain.aggregates.product.ProductId;

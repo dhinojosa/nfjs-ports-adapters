@@ -1,4 +1,4 @@
-package com.evolutionnext.application.results.order;
+package com.evolutionnext.application.results.order.command;
 
 
 import com.evolutionnext.domain.aggregates.order.OrderId;
@@ -10,5 +10,5 @@ import com.evolutionnext.domain.aggregates.order.OrderId;
  * - Request: { "customerId": "uuid" }
  * - Response: { "orderId": "uuid" }
  */
-public record OrderCreated(OrderId orderId) implements OrderResult {
+public record OrderCreated(OrderId orderId) implements ClientOrderResult {
 }

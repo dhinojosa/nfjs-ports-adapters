@@ -75,4 +75,8 @@ public class Order {
             .mapToInt(item -> item.price() * item.quantity())
             .sum();
     }
+
+    public void fulfill() {
+
+    }
 }

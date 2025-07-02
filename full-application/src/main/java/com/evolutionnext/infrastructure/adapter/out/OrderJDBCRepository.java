@@ -74,6 +74,23 @@ public class OrderJDBCRepository implements OrderRepository {
         }
     }
 
+    @Override
+    public int findCountByCustomer(CustomerId id) {
+        try {
+            Connection connection = ConnectionScoped.CONNECTION.get();
+            PreparedStatement ps = connection.prepareStatement(
+                "SELECT COUNT(*) FROM orders WHERE customer_id = ?");
+            ps.setString(1, id.id().toString());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static void persistOrderItems(Order order){
         try {
             for (OrderItem item : order.getOrderItemList()) {
