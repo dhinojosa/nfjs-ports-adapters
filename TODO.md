@@ -46,6 +46,32 @@
     - DELETE http://localhost:8080/order/{orderId}
     - Response: { "orderId": "uuid", "status": "CANCELLED" }
 
+5. Create Product
+    - POST http://localhost:8080/products
+    - Request: { "name": string, "price": number }
+    - Response: { "productId": "uuid" }
+
+6. Get Product
+    - GET http://localhost:8080/product/{productId}
+    - Request: { "productId": "uuid" }
+    - Response: { "productId": "uuid", "name": "string", "price": "number" }
+   
+7. Get Product List
+    - GET http://localhost:8080/products
+    - Response: [{ "productId": "uuid", "name": "string", "price": "number" }]
+
+8. Create Customer
+    - POST http://localhost:8080/customer
+    - Request: { "name": string, "creditLimit": number }
+    - Response: { "customerId": "uuid" }
+
+9. Get Customer
+    - GET http://localhost:8080/customer/{customerId}
+    - Response: { "customerId": "uuid", "name": "string", "creditLimit": "number" }
+
+10. Get Customer List
+    - GET http://localhost:8080/customers
+    - Response: [{ "customerId": "uuid", "name": "string", "creditLimit": "number" }]
 
 ## Test Order
 
