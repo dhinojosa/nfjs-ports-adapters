@@ -1,6 +1,6 @@
 services:
     full-application:
-        image: dhinojosa/full-application:1.0-SNAPSHOT
+        image: dhinojosa/full-application:${FULL_APPLICATION_VERSION:-1.0-SNAPSHOT}
         ports:
             - "8080:8080" # This is optional if HTTP port usage is removed
         depends_on:
