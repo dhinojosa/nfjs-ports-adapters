@@ -6,6 +6,7 @@ import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import net.datafaker.Faker;
 import net.jqwik.api.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 
@@ -25,7 +26,7 @@ public class CustomerArbitrarySupplier implements ArbitrarySupplier<Customer> {
             names,
             creditLimit
         ).as((uuid, name, limit) ->
-            new Customer(new CustomerId(uuid), name, limit)
+            new Customer(new CustomerId(uuid), name, BigDecimal.valueOf(limit))
         );
     }
 }

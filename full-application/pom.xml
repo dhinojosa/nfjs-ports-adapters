@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
-    <url>https://github.com/dhinojosa/gids-ports-adapters</url>
+    <url>https://github.com/dhinojosa/nfjs-ports-adapters</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -189,7 +189,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>openjdk:25-ea-slim-bookworm</image>
+                        <image>azul/zulu-openjdk:24</image>
                         <platforms>
                             <platform>
                                 <architecture>amd64</architecture>

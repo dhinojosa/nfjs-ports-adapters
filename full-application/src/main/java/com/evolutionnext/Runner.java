@@ -5,6 +5,7 @@ import com.evolutionnext.application.port.out.CustomerRepository;
 import com.evolutionnext.application.port.out.OrderRepository;
 import com.evolutionnext.application.port.out.ProductRepository;
 import com.evolutionnext.application.service.order.OrderCommandApplicationService;
+import com.evolutionnext.infrastructure.adapter.in.HealthHandler;
 import com.evolutionnext.infrastructure.adapter.in.MyWebServer;
 import com.evolutionnext.infrastructure.adapter.in.OrderHandler;
 import com.evolutionnext.infrastructure.adapter.out.CustomerJDBCRepository;
@@ -53,7 +54,8 @@ public class Runner {
             customerRepository, jdbcTransactional);
 
         OrderHandler orderHandler = new OrderHandler(forClientOrderCommandPort, new ObjectMapper());
-        return new MyWebServer(orderHandler);
+        HealthHandler healthHandler = new HealthHandler();
+        return new MyWebServer(orderHandler, healthHandler);
     }
 
     private static PGSimpleDataSource createDataSource(String databaseUrl, String databaseUsername, String databasePassword, int portNumber) {

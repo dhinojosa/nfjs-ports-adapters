@@ -45,3 +45,12 @@
 4. Cancel Order
     - DELETE http://localhost:8080/order/{orderId}
     - Response: { "orderId": "uuid", "status": "CANCELLED" }
+
+
+## Test Order
+
+1. `Out` Infrastructure: Test Containers DB Layers (Integration Only)
+2. Domain (Unit Only)
+3. Domain Services (Unit Only)
+4. Application Services (Unit and Integration)
+5. `In` Infrastructure: (Unit and Integration)

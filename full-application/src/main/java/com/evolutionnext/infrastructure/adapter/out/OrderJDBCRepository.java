@@ -21,11 +21,11 @@ public class OrderJDBCRepository implements OrderRepository {
             Connection connection = ConnectionScoped.CONNECTION.get();
             PreparedStatement ps = connection.prepareStatement(
                 "SELECT * FROM orders WHERE id = ?");
-            ps.setString(1, orderId.value().toString());
+            ps.setObject(1, orderId.value());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return Optional.of(Order.of(new OrderId(UUID.fromString(rs.getString("id"))),
-                    new CustomerId(UUID.fromString(rs.getString("customer_id")))));
+                return Optional.of(Order.of(new OrderId(rs.getObject("id", UUID.class)),
+                    new CustomerId(rs.getObject("customer_id", UUID.class))));
             }
         } catch (SQLException e) {
             //errorCode is important to bubble up
@@ -100,7 +100,7 @@ public class OrderJDBCRepository implements OrderRepository {
                     ps.setString(1, order.getOrderId().value().toString());
                     ps.setString(2, item.productId().value().toString());
                     ps.setInt(3, item.quantity());
-                    ps.setDouble(4, item.price());
+                    ps.setBigDecimal(4, item.price());
                     ps.setString(5, item.productId().value().toString());
                     ps.execute();
                 }
@@ -114,8 +114,9 @@ public class OrderJDBCRepository implements OrderRepository {
         try {
             Connection connection = ConnectionScoped.CONNECTION.get();
             PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO orders (customer_id, state) VALUES (?, ?) ON DUPLICATE KEY UPDATE customer_id = ?");
-            ps.setString(2, order.getCustomerId().id().toString());
+                "INSERT INTO orders (id, customer_id, state) VALUES (?, ?, ?);");
+            ps.setObject(1, order.getOrderId().value());
+            ps.setObject(2, order.getCustomerId().id());
             ps.setString(3, convertToString(order.getState()));
             ps.executeUpdate();
         } catch (SQLException e) {

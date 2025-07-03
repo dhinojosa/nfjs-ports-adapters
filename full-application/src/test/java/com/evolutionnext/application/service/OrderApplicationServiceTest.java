@@ -19,6 +19,7 @@ import com.evolutionnext.domain.aggregates.product.ProductId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -53,6 +54,11 @@ class OrderApplicationServiceTest {
             @Override
             public void deleteAll() {
                 orders.clear();
+            }
+
+            @Override
+            public int findCountByCustomer(CustomerId id) {
+                return (int) orders.values().stream().filter(order -> order.getCustomerId().equals(id)).count();
             }
         };
 
@@ -121,7 +127,7 @@ class OrderApplicationServiceTest {
         inMemoryOrderRepository.save(order);
 
         ProductId productId = new ProductId(UUID.randomUUID());
-        AddOrderItem command = new AddOrderItem(orderId, productId, 2, 100);
+        AddOrderItem command = new AddOrderItem(orderId, productId, 2, BigDecimal.valueOf(100));
 
         // Act
         OrderResult result = service.execute(command);
@@ -130,7 +136,7 @@ class OrderApplicationServiceTest {
         assertThat(result).isInstanceOf(OrderItemAdded.class);
         Optional<Order> loadedOrder = inMemoryOrderRepository.load(orderId);
         assertThat(loadedOrder).isPresent();
-        assertThat(loadedOrder.get().total()).isEqualTo(200);
+        assertThat(loadedOrder.get().total()).isEqualTo(BigDecimal.valueOf(200));
     }
 
     @Test
@@ -143,7 +149,7 @@ class OrderApplicationServiceTest {
 
         OrderId orderId = new OrderId(UUID.randomUUID());
         ProductId productId = new ProductId(UUID.randomUUID());
-        AddOrderItem command = new AddOrderItem(orderId, productId, 2, 100);
+        AddOrderItem command = new AddOrderItem(orderId, productId, 2, BigDecimal.valueOf(100));
 
         // Act & Assert
         assertThatThrownBy(() -> service.execute(command))
@@ -166,8 +172,8 @@ class OrderApplicationServiceTest {
 
         ProductId productId1 = new ProductId(UUID.randomUUID());
         ProductId productId2 = new ProductId(UUID.randomUUID());
-        AddOrderItem command1 = new AddOrderItem(orderId, productId1, 2, 100);
-        AddOrderItem command2 = new AddOrderItem(orderId, productId2, 3, 50);
+        AddOrderItem command1 = new AddOrderItem(orderId, productId1, 2, BigDecimal.valueOf(100));
+        AddOrderItem command2 = new AddOrderItem(orderId, productId2, 3, BigDecimal.valueOf(50));
 
         // Act
         service.execute(command1);
@@ -176,7 +182,7 @@ class OrderApplicationServiceTest {
         // Assert
         Optional<Order> loadedOrder = inMemoryOrderRepository.load(orderId);
         assertThat(loadedOrder).isPresent();
-        assertThat(loadedOrder.get().total()).isEqualTo(350);
+        assertThat(loadedOrder.get().total()).isEqualTo(BigDecimal.valueOf(350));
     }
 
     @Test

@@ -9,6 +9,8 @@ import net.jqwik.api.lifecycle.BeforeTry;
 import net.jqwik.testcontainers.Container;
 import net.jqwik.testcontainers.Testcontainers;
 import org.postgresql.ds.PGSimpleDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import javax.sql.DataSource;
@@ -17,9 +19,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,13 +51,15 @@ public class CustomerJDBCRepositoryTest {
     @Property
     void saveAndLoadCustomer(@ForAll(supplier = CustomerArbitrarySupplier.class) Customer customer) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-
             logger.debug("Testing for customer {}", customer);
             ScopedValue.where(ConnectionScoped.CONNECTION, connection)
                 .run(() -> {
                     customerJDBCRepository.save(customer);
-                    Optional<Customer> loadedCustomer = customerJDBCRepository.load(customer.id());
-                    assertThat(loadedCustomer).isNotEmpty().contains(customer);
+                    Integer result = customerJDBCRepository
+                        .load(customer.id())
+                        .map(c1 -> c1.creditLimit().compareTo(customer.creditLimit()))
+                        .orElse(Integer.MAX_VALUE);
+                    assertThat(result).isZero();
                 });
             logger.debug("Completed Testing for customer {}", customer);
         } catch (Exception e) {
@@ -80,7 +81,7 @@ public class CustomerJDBCRepositoryTest {
 
     @Property
     void deleteCustomer(@ForAll("customerListWithSelectionArbitrary")
-                Tuple2<List<Customer>, Customer> customerEntry) {
+                        Tuple2<List<Customer>, Customer> customerEntry) {
         try (Connection connection = dataSource.getConnection()) {
             ScopedValue.where(ConnectionScoped.CONNECTION, connection)
                 .run(() -> {

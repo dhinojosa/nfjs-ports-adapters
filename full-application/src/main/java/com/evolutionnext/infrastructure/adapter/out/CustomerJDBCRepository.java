@@ -28,7 +28,7 @@ public class CustomerJDBCRepository implements CustomerRepository {
                 return Optional.of(new Customer(
                     new CustomerId(resultSet.getObject("id", UUID.class)),
                     resultSet.getString("name"),
-                    resultSet.getDouble("credit_limit")
+                    resultSet.getBigDecimal("credit_limit")
                 ));
             }
         } catch (SQLException e) {
@@ -47,7 +47,7 @@ public class CustomerJDBCRepository implements CustomerRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setObject(1, customer.id().id());
             preparedStatement.setString(2, customer.name());
-            preparedStatement.setDouble(3, customer.creditLimit());
+            preparedStatement.setBigDecimal(3, customer.creditLimit());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -67,7 +67,7 @@ public class CustomerJDBCRepository implements CustomerRepository {
                 customers.add(new Customer(
                     new CustomerId(UUID.fromString(resultSet.getString("id"))),
                     resultSet.getString("name"),
-                    resultSet.getDouble("credit_limit")
+                    resultSet.getBigDecimal("credit_limit")
                 ));
             }
             return customers;

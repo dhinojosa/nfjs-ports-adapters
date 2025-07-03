@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,9 +22,10 @@ class OrderTest {
     @Test
     void testCreateOrderAggregate() {
         Order order = Order.of(new OrderId(UUID.randomUUID()), new CustomerId(UUID.randomUUID()));
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 10, 100);
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 4, 10);
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 1, 120);
+
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 10, BigDecimal.valueOf(100));
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 4, BigDecimal.valueOf(10));
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 1, BigDecimal.valueOf(120));
 
         order.getOrderEventList().forEach(e -> logger.debug(e.toString()));
     }
@@ -30,9 +33,9 @@ class OrderTest {
     @Test
     void testSubmittedOrderAggregate() {
         Order order = Order.of(new OrderId(UUID.randomUUID()), new CustomerId(UUID.randomUUID()));
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 10, 100);
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 4, 10);
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 1, 120);
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 10, BigDecimal.valueOf(100));
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 4, BigDecimal.valueOf(10));
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 1, BigDecimal.valueOf(120));
         List<OrderEvent> orderEventList = order.getOrderEventList();
         assertThat(orderEventList.size()).isEqualTo(4);
 
@@ -44,9 +47,9 @@ class OrderTest {
     @Test
     void testACanceledOrderCanNoLongerBeSubmitted() {
         Order order = Order.of(new OrderId(UUID.randomUUID()), new CustomerId(UUID.randomUUID()));
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 10, 100);
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 4, 10);
-        order.addOrderItem(new ProductId(UUID.randomUUID()), 1, 120);
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 10, BigDecimal.valueOf(100));
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 4, BigDecimal.valueOf(10));
+        order.addOrderItem(new ProductId(UUID.randomUUID()), 1, BigDecimal.valueOf(120));
         order.cancel();
         assertThatThrownBy(order::submit)
             .isInstanceOf(IllegalStateException.class)

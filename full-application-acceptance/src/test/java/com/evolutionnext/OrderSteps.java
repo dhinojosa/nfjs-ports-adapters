@@ -8,6 +8,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +40,7 @@ public class OrderSteps {
             UUID productId = UUID.fromString(entry.get("product_id"));
             int quantity = Integer.parseInt(entry.get("quantity"));
             int amount = Integer.parseInt(entry.get("amount"));
-            order.addOrderItem(new ProductId(productId), quantity, amount);
+            order.addOrderItem(new ProductId(productId), quantity, BigDecimal.valueOf(amount));
         }
     }
 }

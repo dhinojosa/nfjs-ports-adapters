@@ -1,5 +1,7 @@
 package com.evolutionnext.application.commands.product;
 
 
-public record CreateProduct(String name, float price) implements ProductCommand {
+import java.math.BigDecimal;
+
+public record CreateProduct(String name, BigDecimal price) implements ProductCommand {
 }

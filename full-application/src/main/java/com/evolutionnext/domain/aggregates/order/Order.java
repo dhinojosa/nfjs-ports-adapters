@@ -1,5 +1,7 @@
 package com.evolutionnext.domain.aggregates.order;
 
+import java.math.BigDecimal;
+
 
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.product.ProductId;
@@ -44,7 +46,7 @@ public class Order {
         }
     }
 
-    public void addOrderItem(ProductId productId, int quantity, int price) {
+    public void addOrderItem(ProductId productId, int quantity, BigDecimal price) {
         OrderItem orderItem = new OrderItem(productId, quantity, price);
         orderItemList.add(orderItem);
         orderEventList.add(new OrderItemAdded(this.orderId, orderItem));
@@ -70,13 +72,24 @@ public class Order {
         return customerId;
     }
 
-    public int total() {
+    public BigDecimal total() {
         return orderItemList.stream()
-            .mapToInt(item -> item.price() * item.quantity())
-            .sum();
+            .map(item -> item.price().multiply(BigDecimal.valueOf(item.quantity())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void fulfill() {
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Order order)) return false;
+        return Objects.equals(orderId, order.orderId) && Objects.equals(orderItemList, order.orderItemList) && Objects.equals(customerId, order.customerId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId, orderItemList, customerId);
     }
 }
