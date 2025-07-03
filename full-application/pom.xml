@@ -189,7 +189,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>azul/zulu-openjdk:24</image>
+                        <image>openjdk:25-ea-slim-bookworm</image>
                         <platforms>
                             <platform>
                                 <architecture>amd64</architecture>
