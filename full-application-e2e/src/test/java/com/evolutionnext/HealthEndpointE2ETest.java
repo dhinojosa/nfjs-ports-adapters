@@ -56,8 +56,6 @@ public class HealthEndpointE2ETest {
         .withEnv(env)
         .waitingFor("full-application", Wait.forHttp("/health").forStatusCode(200).forPort(8080))
         .withExposedService("full-application", 8080);
-//        .withLocalCompose(true)
-
 
     private static File getComposeFile() {
         try {
