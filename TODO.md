@@ -80,3 +80,4 @@
 3. Domain Services (Unit Only)
 4. Application Services (Unit and Integration)
 5. `In` Infrastructure: (Unit and Integration)
+6. e2e
