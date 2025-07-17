@@ -80,7 +80,7 @@ public class OrderJDBCRepository implements OrderRepository {
             Connection connection = ConnectionScoped.CONNECTION.get();
             PreparedStatement ps = connection.prepareStatement(
                 "SELECT COUNT(*) FROM orders WHERE customer_id = ?");
-            ps.setString(1, id.id().toString());
+            ps.setObject(1, id.id());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
