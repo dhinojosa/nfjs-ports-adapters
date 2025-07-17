@@ -1,9 +1,12 @@
 package com.evolutionnext;
 
+import com.evolutionnext.application.port.in.customer.ForClientCustomerCommandPort;
 import com.evolutionnext.application.port.in.order.ForClientOrderCommandPort;
 import com.evolutionnext.application.port.out.CustomerRepository;
 import com.evolutionnext.application.port.out.OrderRepository;
 import com.evolutionnext.application.port.out.ProductRepository;
+import com.evolutionnext.application.service.customer.CustomerCommandApplicationService;
+import com.evolutionnext.application.service.customer.CustomerQueryApplicationService;
 import com.evolutionnext.application.service.order.OrderCommandApplicationService;
 import com.evolutionnext.infrastructure.adapter.in.HealthHandler;
 import com.evolutionnext.infrastructure.adapter.in.HomeHandler;
@@ -51,13 +54,18 @@ public class Runner {
         CustomerRepository customerRepository = new CustomerJDBCRepository();
         OrderRepository orderRepository = new OrderJDBCRepository();
         ProductRepository productRepository = new ProductJDBCRepository();
+
         ForClientOrderCommandPort forClientOrderCommandPort = new OrderCommandApplicationService(orderRepository,
             customerRepository, jdbcTransactional);
+        CustomerQueryApplicationService customerQueryApplicationService =
+            new CustomerQueryApplicationService(customerRepository, orderRepository);
+        ForClientCustomerCommandPort forClientCustomerCommandPort =
+            new CustomerCommandApplicationService(customerRepository, jdbcTransactional);
 
-        OrderHandler orderHandler = new OrderHandler(forClientOrderCommandPort, new ObjectMapper());
+        ObjectMapper objectMapper = new ObjectMapper();
+        OrderHandler orderHandler = new OrderHandler(forClientOrderCommandPort, objectMapper);
         HealthHandler healthHandler = new HealthHandler();
         HomeHandler homeHandler = new HomeHandler();
-
         return new MyWebServer(orderHandler, healthHandler, homeHandler);
     }
 
