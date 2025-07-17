@@ -1,4 +1,4 @@
-package com.evolutionnext.infrastructure.adapter;
+package com.evolutionnext.infrastructure.adapter.in;
 
 import java.util.HashMap;
 import java.util.Map;
