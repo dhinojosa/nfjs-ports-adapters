@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 /// Aggregate for Order
 public class Order {
@@ -19,7 +20,6 @@ public class Order {
     private final List<OrderItem> orderItemList;
     private final List<OrderEvent> orderEventList;
     private final CustomerId customerId;
-
 
     protected Order(OrderId orderId, CustomerId customerId, ArrayList<OrderEvent> orderEventList) {
         this.orderId = orderId;
@@ -80,6 +80,14 @@ public class Order {
 
     public void fulfill() {
 
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Order.class.getSimpleName() + "[", "]")
+            .add("orderId=" + orderId)
+            .add("customerId=" + customerId)
+            .toString();
     }
 
     @Override
