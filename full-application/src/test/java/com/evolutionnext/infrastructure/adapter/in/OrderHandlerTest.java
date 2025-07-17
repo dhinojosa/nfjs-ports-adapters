@@ -8,7 +8,6 @@ import com.evolutionnext.application.results.order.command.OrderItemAdded;
 import com.evolutionnext.application.results.order.command.OrderSubmitted;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.OrderId;
-import com.evolutionnext.infrastructure.adapter.HTTPExchangeStub;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
