@@ -28,6 +28,7 @@ class OrderTest {
         order.addOrderItem(new ProductId(UUID.randomUUID()), 1, BigDecimal.valueOf(120));
 
         order.getOrderEventList().forEach(e -> logger.debug(e.toString()));
+        assertThat(order.total()).isEqualTo(BigDecimal.valueOf(1160));
     }
 
     @Test
