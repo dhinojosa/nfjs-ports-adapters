@@ -16,6 +16,7 @@ import com.evolutionnext.domain.aggregates.order.Order;
 import net.datafaker.Faker;
 import net.jqwik.api.*;
 import net.jqwik.api.arbitraries.ListArbitrary;
+import net.jqwik.api.constraints.Positive;
 import net.jqwik.api.lifecycle.BeforeTry;
 import net.jqwik.api.Tuple;
 import net.jqwik.testcontainers.Container;
@@ -60,12 +61,19 @@ public class CustomerQueryApplicationServiceIntegrationTest {
         dataSource = pgSimpleDataSource;
     }
 
+    @Provide
     public Arbitrary<Product> getProduct() {
         Arbitrary<String> productNameArbitrary = Arbitraries.ofSuppliers(() -> faker.commerce().productName());
         Arbitrary<BigDecimal> priceArbitrary = Arbitraries.bigDecimals().between(BigDecimal.valueOf(3), BigDecimal.valueOf(300));
         Arbitrary<UUID> uuid = Arbitraries.create(UUID::randomUUID);
         return Combinators.combine(productNameArbitrary, priceArbitrary, uuid).as((name, price, id) ->
             new Product(new ProductId(id), name, price));
+    }
+
+    @Property
+    public void testProductProperty(@ForAll("getProduct") Product product) {
+        System.out.printf("Product: %s ", product);
+        assertThat(product.id()).isNotNull();
     }
 
     @Provide
@@ -79,10 +87,13 @@ public class CustomerQueryApplicationServiceIntegrationTest {
 
     @Property
     public void testEnsureAllOrdersAreFromCustomer(@ForAll("getData") Tuple.Tuple3<List<Product>, Customer, List<Order>> data) throws SQLException {
+        System.out.println("Data: " + data);
         Customer customer = data.get2();
         List<Order> orderList = data.get3();
         orderList.forEach(order -> assertThat(order.getCustomerId()).isEqualTo(customer.id()));
     }
+
+
 
     @Property
     public void testFindByIdAndVerifyCount(@ForAll("getData") Tuple.Tuple3<List<Product>, Customer, List<Order>> data) throws SQLException {
