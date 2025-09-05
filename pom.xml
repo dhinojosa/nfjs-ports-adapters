@@ -15,6 +15,7 @@
         <module>full-application-acceptance</module>
         <module>full-application-e2e</module>
         <module>blackjack</module>
+        <module>directory-structure-feature</module>
     </modules>
     <name>${project.artifactId}</name>
     <url>https://github.com/dhinojosa/${project.artifactId}</url>

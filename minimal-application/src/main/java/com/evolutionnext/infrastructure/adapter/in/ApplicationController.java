@@ -1,6 +1,6 @@
 package com.evolutionnext.infrastructure.adapter.in;
 
-import com.evolutionnext.application.port.in.ForCalculatingTaxes;
+import com.evolutionnext.port.in.ForCalculatingTaxes;
 
 /**
  * I included the controller here. This will represent what your

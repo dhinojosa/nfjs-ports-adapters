@@ -1,4 +1,4 @@
-package com.evolutionnext.application.port.in;
+package com.evolutionnext.port.in;
 
 //From the book Hexagonal Architecture Explained
 

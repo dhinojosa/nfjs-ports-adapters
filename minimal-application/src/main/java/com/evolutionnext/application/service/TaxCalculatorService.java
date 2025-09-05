@@ -1,8 +1,8 @@
 package com.evolutionnext.application.service;
 
 
-import com.evolutionnext.application.port.in.ForCalculatingTaxes;
-import com.evolutionnext.application.port.out.ForGettingTaxRates;
+import com.evolutionnext.port.in.ForCalculatingTaxes;
+import com.evolutionnext.port.out.ForGettingTaxRates;
 
 /**
  * This is an application service. Note the repository injected here. The book

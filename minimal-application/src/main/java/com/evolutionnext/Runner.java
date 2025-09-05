@@ -1,6 +1,6 @@
 package com.evolutionnext;
 
-import com.evolutionnext.application.port.out.ForGettingTaxRates;
+import com.evolutionnext.port.out.ForGettingTaxRates;
 import com.evolutionnext.application.service.TaxCalculatorService;
 import com.evolutionnext.infrastructure.adapter.in.ApplicationController;
 import com.evolutionnext.infrastructure.adapter.out.FixedTaxRateRepository;

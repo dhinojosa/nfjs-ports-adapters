@@ -1,7 +1,7 @@
 package com.evolutionnext.infrastructure.adapter.out;
 
 
-import com.evolutionnext.application.port.out.ForGettingTaxRates;
+import com.evolutionnext.port.out.ForGettingTaxRates;
 
 /**
  * This is a fixed repository,
