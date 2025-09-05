@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +30,7 @@ public class OrderSteps {
 
     @Then("the total should be {int}")
     public void theTotalShouldBe(int total) {
-        assertThat(order.total()).isEqualTo(total);
+        assertThat(order.total()).isEqualTo(BigDecimal.valueOf(total));
     }
 
     @When("I add the following order items:")
