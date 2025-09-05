@@ -3,6 +3,7 @@ package com.evolutionnext.infrastructure.adapter.in;
 
 import com.evolutionnext.application.port.in.order.ForClientOrderCommandPort;
 import com.evolutionnext.application.commands.order.InitializeOrder;
+import com.evolutionnext.application.results.order.command.OrderFulfilled;
 import com.evolutionnext.application.results.order.command.OrderResult;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.Order;
