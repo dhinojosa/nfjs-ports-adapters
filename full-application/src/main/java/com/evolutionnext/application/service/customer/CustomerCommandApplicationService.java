@@ -1,14 +1,13 @@
 package com.evolutionnext.application.service.customer;
 
 
-import com.evolutionnext.application.commands.customer.CreateCustomer;
 import com.evolutionnext.application.commands.customer.CustomerCommand;
-import com.evolutionnext.application.port.in.customer.ForClientCustomerCommandPort;
 import com.evolutionnext.application.results.customer.command.CustomerCreated;
 import com.evolutionnext.application.results.customer.command.CustomerResult;
-import com.evolutionnext.application.port.out.CustomerRepository;
-import com.evolutionnext.application.port.out.Transactional;
 import com.evolutionnext.domain.aggregates.customer.Customer;
+import com.evolutionnext.port.in.customer.ForClientCustomerCommandPort;
+import com.evolutionnext.port.out.Transactional;
+import com.evolutionnext.port.out.customer.CustomerRepository;
 
 public class CustomerCommandApplicationService implements ForClientCustomerCommandPort {
     private final CustomerRepository customerRepository;
@@ -24,7 +23,7 @@ public class CustomerCommandApplicationService implements ForClientCustomerComma
     @Override
     public CustomerResult execute(CustomerCommand command) {
         return switch (command) {
-            case CreateCustomer createCustomer -> transactional.transactionally(() -> {
+            case CustomerCommand.CreateCustomer createCustomer -> transactional.transactionally(() -> {
                 var customer = new Customer(createCustomer.customerId(),
                     createCustomer.name(),
                     createCustomer.creditLimit());

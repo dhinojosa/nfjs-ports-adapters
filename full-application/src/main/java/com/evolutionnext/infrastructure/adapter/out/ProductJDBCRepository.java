@@ -1,6 +1,6 @@
 package com.evolutionnext.infrastructure.adapter.out;
 
-import com.evolutionnext.application.port.out.ProductRepository;
+import com.evolutionnext.port.out.product.ProductRepository;
 import com.evolutionnext.domain.aggregates.product.Product;
 import com.evolutionnext.domain.aggregates.product.ProductId;
 

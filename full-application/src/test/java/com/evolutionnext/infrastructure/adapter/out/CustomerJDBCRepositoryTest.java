@@ -25,9 +25,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 public class CustomerJDBCRepositoryTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomerJDBCRepositoryTest.class);
+    private static final Logger logger =
+        LoggerFactory.getLogger(CustomerJDBCRepositoryTest.class);
     private DataSource dataSource;
-    private final CustomerJDBCRepository customerJDBCRepository = new CustomerJDBCRepository();
+    private final CustomerJDBCRepository customerJDBCRepository =
+        new CustomerJDBCRepository();
 
 
     @Container
@@ -49,7 +51,14 @@ public class CustomerJDBCRepositoryTest {
 
 
     @Property
+    void testSumOfNumbers(@ForAll int a, @ForAll int b) {
+        System.out.println("a: " + a + " b: " + b);
+    }
+
+    @Property
     void saveAndLoadCustomer(@ForAll(supplier = CustomerArbitrarySupplier.class) Customer customer) throws SQLException {
+        System.out.println(customer);
+
         try (Connection connection = dataSource.getConnection()) {
             logger.debug("Testing for customer {}", customer);
             ScopedValue.where(ConnectionScoped.CONNECTION, connection)

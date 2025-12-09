@@ -1,10 +1,10 @@
 package com.evolutionnext;
 
-import com.evolutionnext.application.port.in.customer.ForClientCustomerCommandPort;
-import com.evolutionnext.application.port.in.order.ForClientOrderCommandPort;
-import com.evolutionnext.application.port.out.CustomerRepository;
-import com.evolutionnext.application.port.out.OrderRepository;
-import com.evolutionnext.application.port.out.ProductRepository;
+import com.evolutionnext.port.in.customer.ForClientCustomerCommandPort;
+import com.evolutionnext.port.in.order.ForClientOrderCommandPort;
+import com.evolutionnext.port.out.customer.CustomerRepository;
+import com.evolutionnext.port.out.order.OrderRepository;
+import com.evolutionnext.port.out.product.ProductRepository;
 import com.evolutionnext.application.service.customer.CustomerCommandApplicationService;
 import com.evolutionnext.application.service.customer.CustomerQueryApplicationService;
 import com.evolutionnext.application.service.order.OrderCommandApplicationService;

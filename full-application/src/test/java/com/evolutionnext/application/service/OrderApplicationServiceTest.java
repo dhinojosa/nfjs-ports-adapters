@@ -1,12 +1,11 @@
 package com.evolutionnext.application.service;
 
-import com.evolutionnext.application.commands.order.AddOrderItem;
 import com.evolutionnext.application.commands.order.CancelOrder;
-import com.evolutionnext.application.commands.order.InitializeOrder;
-import com.evolutionnext.application.port.in.order.ForAdminOrderCommandPort;
-import com.evolutionnext.application.port.out.CustomerRepository;
-import com.evolutionnext.application.port.out.OrderRepository;
-import com.evolutionnext.application.port.out.Transactional;
+import com.evolutionnext.application.commands.order.ClientOrderCommand;
+import com.evolutionnext.port.in.order.ForAdminOrderCommandPort;
+import com.evolutionnext.port.out.customer.CustomerRepository;
+import com.evolutionnext.port.out.order.OrderRepository;
+import com.evolutionnext.port.out.Transactional;
 import com.evolutionnext.application.results.order.command.OrderCanceled;
 import com.evolutionnext.application.results.order.command.OrderItemAdded;
 import com.evolutionnext.application.results.order.command.OrderResult;
@@ -106,7 +105,7 @@ class OrderApplicationServiceTest {
             inMemoryCustomerRepository, passthroughTransactional);
 
         CustomerId customerId = new CustomerId(UUID.randomUUID());
-        InitializeOrder command = new InitializeOrder(customerId);
+        ClientOrderCommand.InitializeOrder command = new ClientOrderCommand.InitializeOrder(customerId);
 
         // Act
         OrderResult orderResult = service.execute(command);
@@ -127,7 +126,7 @@ class OrderApplicationServiceTest {
         inMemoryOrderRepository.save(order);
 
         ProductId productId = new ProductId(UUID.randomUUID());
-        AddOrderItem command = new AddOrderItem(orderId, productId, 2, BigDecimal.valueOf(100));
+        ClientOrderCommand.AddOrderItem command = new ClientOrderCommand.AddOrderItem(orderId, productId, 2, BigDecimal.valueOf(100));
 
         // Act
         OrderResult result = service.execute(command);
@@ -149,7 +148,7 @@ class OrderApplicationServiceTest {
 
         OrderId orderId = new OrderId(UUID.randomUUID());
         ProductId productId = new ProductId(UUID.randomUUID());
-        AddOrderItem command = new AddOrderItem(orderId, productId, 2, BigDecimal.valueOf(100));
+        ClientOrderCommand.AddOrderItem command = new ClientOrderCommand.AddOrderItem(orderId, productId, 2, BigDecimal.valueOf(100));
 
         // Act & Assert
         assertThatThrownBy(() -> service.execute(command))
@@ -172,8 +171,8 @@ class OrderApplicationServiceTest {
 
         ProductId productId1 = new ProductId(UUID.randomUUID());
         ProductId productId2 = new ProductId(UUID.randomUUID());
-        AddOrderItem command1 = new AddOrderItem(orderId, productId1, 2, BigDecimal.valueOf(100));
-        AddOrderItem command2 = new AddOrderItem(orderId, productId2, 3, BigDecimal.valueOf(50));
+        ClientOrderCommand.AddOrderItem command1 = new ClientOrderCommand.AddOrderItem(orderId, productId1, 2, BigDecimal.valueOf(100));
+        ClientOrderCommand.AddOrderItem command2 = new ClientOrderCommand.AddOrderItem(orderId, productId2, 3, BigDecimal.valueOf(50));
 
         // Act
         service.execute(command1);

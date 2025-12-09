@@ -21,26 +21,33 @@ public class Order {
     private final List<OrderEvent> orderEventList;
     private final CustomerId customerId;
 
+    //region Constructor
     protected Order(OrderId orderId, CustomerId customerId, ArrayList<OrderEvent> orderEventList) {
         this.orderId = orderId;
         this.orderItemList = new ArrayList<>();
         this.orderEventList = orderEventList;
         this.customerId = customerId;
     }
+    //endregion
 
+    //region Static Factory Methods
     public static Order of(OrderId orderId, CustomerId customer) {
         ArrayList<OrderEvent> orderEventList = new ArrayList<>();
         orderEventList.add(new OrderCreated(orderId, LocalDateTime.now()));
         return new Order(orderId, customer, orderEventList);
     }
+    //endregion
 
+    //region Business Methods
     public void cancel() {
         orderEventList.add(new OrderCanceled(LocalDateTime.now()));
     }
 
     public void submit() {
-        if (Objects.requireNonNull(getState()) instanceof OrderCanceled) {
-            throw new IllegalStateException(CANCELED_STATEMENT);
+        if (Objects.requireNonNull(getState())
+            instanceof OrderCanceled) {
+            throw new
+                IllegalStateException(CANCELED_STATEMENT);
         } else {
             orderEventList.add(new OrderSubmitted(LocalDateTime.now()));
         }
@@ -81,7 +88,9 @@ public class Order {
     public void fulfill() {
 
     }
+    //endregion
 
+    //region toString, equals, hashCode
     @Override
     public String toString() {
         return new StringJoiner(", ", Order.class.getSimpleName() + "[", "]")
@@ -100,4 +109,5 @@ public class Order {
     public int hashCode() {
         return Objects.hash(orderId, orderItemList, customerId);
     }
+    //endregion
 }

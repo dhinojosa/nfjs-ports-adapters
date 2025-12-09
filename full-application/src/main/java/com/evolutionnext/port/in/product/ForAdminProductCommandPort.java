@@ -1,4 +1,4 @@
-package com.evolutionnext.application.port.in.product;
+package com.evolutionnext.port.in.product;
 
 
 import com.evolutionnext.application.commands.product.ProductCommand;

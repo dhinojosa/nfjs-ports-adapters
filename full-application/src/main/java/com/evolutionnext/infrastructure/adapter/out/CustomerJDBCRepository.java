@@ -1,7 +1,7 @@
 package com.evolutionnext.infrastructure.adapter.out;
 
 
-import com.evolutionnext.application.port.out.CustomerRepository;
+import com.evolutionnext.port.out.customer.CustomerRepository;
 import com.evolutionnext.domain.aggregates.customer.Customer;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 

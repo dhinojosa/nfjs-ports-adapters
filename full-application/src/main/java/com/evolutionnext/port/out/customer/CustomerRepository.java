@@ -1,4 +1,4 @@
-package com.evolutionnext.application.port.out;
+package com.evolutionnext.port.out.customer;
 
 import com.evolutionnext.domain.aggregates.customer.Customer;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;

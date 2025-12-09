@@ -1,13 +1,13 @@
 package com.evolutionnext.infrastructure.adapter.in;
 
 import com.evolutionnext.application.commands.order.*;
-import com.evolutionnext.application.port.in.order.ForClientOrderCommandPort;
 import com.evolutionnext.application.results.order.command.OrderCanceled;
 import com.evolutionnext.application.results.order.command.OrderCreated;
 import com.evolutionnext.application.results.order.command.OrderItemAdded;
 import com.evolutionnext.application.results.order.command.OrderSubmitted;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.OrderId;
+import com.evolutionnext.port.in.order.ForClientOrderCommandPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,9 +42,9 @@ public class OrderHandlerTest {
         forCustomerPort = command -> {
             recordedOrders.add(command);
             return switch (command) {
-                case AddOrderItem addOrderItem -> new OrderItemAdded(addOrderItem.orderId(), List.of());
+                case ClientOrderCommand.AddOrderItem addOrderItem -> new OrderItemAdded(addOrderItem.orderId(), List.of());
                 case CancelOrder cancelOrder -> new OrderCanceled(cancelOrder.orderId());
-                case InitializeOrder _ -> new OrderCreated(new OrderId(UUID.randomUUID()));
+                case ClientOrderCommand.InitializeOrder _ -> new OrderCreated(new OrderId(UUID.randomUUID()));
                 case SubmitOrder submitOrder -> new OrderSubmitted(submitOrder.orderId());
             };
         };
@@ -74,7 +74,7 @@ public class OrderHandlerTest {
         assertThat(recordedOrders).hasSize(1);
 
         OrderCommand recordedOrder = recordedOrders.getFirst();
-        assertThat(recordedOrder).isInstanceOf(InitializeOrder.class);
+        assertThat(recordedOrder).isInstanceOf(ClientOrderCommand.InitializeOrder.class);
         assertThat(recordedOrder).extracting("customerId").isEqualTo(customerId);
 
         String string = responseOutputStream.toString(Charset.defaultCharset());

@@ -1,10 +1,10 @@
 package com.evolutionnext.application.service.order;
 
 
-import com.evolutionnext.application.port.in.order.ForClientOrderQueryPort;
-import com.evolutionnext.application.port.out.CustomerRepository;
-import com.evolutionnext.application.port.out.OrderRepository;
-import com.evolutionnext.application.port.out.Transactional;
+import com.evolutionnext.port.in.order.ForClientOrderQueryPort;
+import com.evolutionnext.port.out.customer.CustomerRepository;
+import com.evolutionnext.port.out.order.OrderRepository;
+import com.evolutionnext.port.out.Transactional;
 import com.evolutionnext.application.results.order.query.CustomerNotFound;
 import com.evolutionnext.application.results.order.query.OrderFindResult;
 import com.evolutionnext.application.results.order.query.OrderFindSuccess;

@@ -1,4 +1,4 @@
-package com.evolutionnext.application.port.in.order;
+package com.evolutionnext.port.in.order;
 
 
 import com.evolutionnext.application.commands.order.ClientOrderCommand;

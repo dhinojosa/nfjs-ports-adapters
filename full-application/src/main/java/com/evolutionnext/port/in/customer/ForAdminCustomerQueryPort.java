@@ -1,4 +1,4 @@
-package com.evolutionnext.application.port.in.customer;
+package com.evolutionnext.port.in.customer;
 
 
 import com.evolutionnext.application.results.customer.query.CustomerQueryResult;

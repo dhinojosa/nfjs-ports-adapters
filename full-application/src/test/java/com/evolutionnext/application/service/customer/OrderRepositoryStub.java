@@ -1,7 +1,7 @@
 package com.evolutionnext.application.service.customer;
 
 
-import com.evolutionnext.application.port.out.OrderRepository;
+import com.evolutionnext.port.out.order.OrderRepository;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.Order;
 import com.evolutionnext.domain.aggregates.order.OrderId;

@@ -1,6 +1,6 @@
 package com.evolutionnext.infrastructure.adapter.out;
 
-import com.evolutionnext.application.port.out.Transactional;
+import com.evolutionnext.port.out.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -17,7 +17,8 @@ public class JDBCTransactional implements Transactional {
     @Override
     public <T> T transactionally(Supplier<T> work) {
         try {
-            return ScopedValue.where(ConnectionScoped.CONNECTION, dataSource.getConnection()).call(() -> {
+            return ScopedValue.where(ConnectionScoped.CONNECTION,
+                dataSource.getConnection()).call(() -> {
                 try (Connection connection = ConnectionScoped.CONNECTION.get()) {
                     connection.setAutoCommit(false); // Begin transaction
                     T result = work.get();           // Execute work

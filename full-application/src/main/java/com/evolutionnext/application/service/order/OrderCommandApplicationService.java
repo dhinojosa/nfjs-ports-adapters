@@ -2,11 +2,11 @@ package com.evolutionnext.application.service.order;
 
 
 import com.evolutionnext.application.commands.order.*;
-import com.evolutionnext.application.port.in.order.ForAdminOrderCommandPort;
-import com.evolutionnext.application.port.in.order.ForClientOrderCommandPort;
-import com.evolutionnext.application.port.out.CustomerRepository;
-import com.evolutionnext.application.port.out.OrderRepository;
-import com.evolutionnext.application.port.out.Transactional;
+import com.evolutionnext.port.in.order.ForAdminOrderCommandPort;
+import com.evolutionnext.port.in.order.ForClientOrderCommandPort;
+import com.evolutionnext.port.out.customer.CustomerRepository;
+import com.evolutionnext.port.out.order.OrderRepository;
+import com.evolutionnext.port.out.Transactional;
 import com.evolutionnext.application.results.order.command.*;
 import com.evolutionnext.domain.aggregates.customer.Customer;
 import com.evolutionnext.domain.aggregates.order.Order;
@@ -15,7 +15,8 @@ import com.evolutionnext.domain.services.OrderDomainService;
 
 import java.util.UUID;
 
-public class OrderCommandApplicationService implements ForClientOrderCommandPort, ForAdminOrderCommandPort {
+public class OrderCommandApplicationService implements
+    ForClientOrderCommandPort, ForAdminOrderCommandPort {
 
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
@@ -32,21 +33,8 @@ public class OrderCommandApplicationService implements ForClientOrderCommandPort
     @Override
     public ClientOrderResult execute(ClientOrderCommand command) {
         return switch (command) {
-            case InitializeOrder initializeOrder -> transactional.transactionally(() -> {
-                Order order = Order.of(new OrderId(UUID.randomUUID()),
-                    initializeOrder.customerId());
-                orderRepository.save(order);
-                return new OrderSubmitted(order.getOrderId());
-            });
-            case AddOrderItem addOrderItem -> transactional.transactionally(() -> {
-                Order order = orderRepository.load(addOrderItem.orderId())
-                    .orElseThrow(() -> new RuntimeException("Order not found"));
-                order.addOrderItem(addOrderItem.productId(),
-                    addOrderItem.quantity(),
-                    addOrderItem.price());
-                orderRepository.save(order);
-                return new OrderItemAdded(order.getOrderId(), order.getOrderItemList());
-            });
+            case ClientOrderCommand.InitializeOrder initializeOrder -> processOrder(initializeOrder);
+            case ClientOrderCommand.AddOrderItem addOrderItem -> addOrderItem(addOrderItem);
             case CancelOrder cancelOrder -> transactional.transactionally(() -> {
                 Order order = orderRepository.load(cancelOrder.orderId())
                     .orElseThrow(() -> new RuntimeException("Order not found"));
@@ -69,6 +57,27 @@ public class OrderCommandApplicationService implements ForClientOrderCommandPort
         };
     }
 
+    private OrderItemAdded addOrderItem(ClientOrderCommand.AddOrderItem addOrderItem) {
+        return transactional.transactionally(() -> {
+            Order order = orderRepository.load(addOrderItem.orderId())
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+            order.addOrderItem(addOrderItem.productId(),
+                addOrderItem.quantity(),
+                addOrderItem.price());
+            orderRepository.save(order);
+            return new OrderItemAdded(order.getOrderId(), order.getOrderItemList());
+        });
+    }
+
+    private OrderSubmitted processOrder(ClientOrderCommand.InitializeOrder initializeOrder) {
+        return transactional.transactionally(() -> {
+            Order order = Order.of(new OrderId(UUID.randomUUID()),
+                initializeOrder.customerId());
+            orderRepository.save(order);
+            return new OrderSubmitted(order.getOrderId());
+        });
+    }
+
     @Override
     public AdminOrderResult execute(AdminOrderCommand command) {
         return switch (command) {
@@ -79,7 +88,7 @@ public class OrderCommandApplicationService implements ForClientOrderCommandPort
                 orderRepository.save(order);
                 yield new OrderCanceled(order.getOrderId());
             }
-            case FulfillOrder fulfillOrder -> {
+            case AdminOrderCommand.FulfillOrder fulfillOrder -> {
                 Order order = orderRepository.load(fulfillOrder.orderId())
                     .orElseThrow(() -> new RuntimeException("Order not found"));
                 order.fulfill();

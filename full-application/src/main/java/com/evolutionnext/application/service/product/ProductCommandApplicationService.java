@@ -1,10 +1,9 @@
 package com.evolutionnext.application.service.product;
 
-import com.evolutionnext.application.commands.product.CreateProduct;
 import com.evolutionnext.application.commands.product.ProductCommand;
-import com.evolutionnext.application.port.in.product.ForAdminProductCommandPort;
-import com.evolutionnext.application.port.out.ProductRepository;
-import com.evolutionnext.application.port.out.Transactional;
+import com.evolutionnext.port.in.product.ForAdminProductCommandPort;
+import com.evolutionnext.port.out.product.ProductRepository;
+import com.evolutionnext.port.out.Transactional;
 import com.evolutionnext.application.results.product.command.ProductCreated;
 import com.evolutionnext.application.results.product.command.ProductResult;
 import com.evolutionnext.domain.aggregates.product.Product;
@@ -26,7 +25,7 @@ public class ProductCommandApplicationService implements ForAdminProductCommandP
     @Override
     public ProductResult execute(ProductCommand command) throws Exception {
         return switch (command) {
-            case CreateProduct(String name, BigDecimal price) -> transactional.transactionally(() -> {
+            case ProductCommand.CreateProduct(String name, BigDecimal price) -> transactional.transactionally(() -> {
                 ProductId id = new ProductId(UUID.randomUUID());
                 productRepository.save(new Product(id, name, price));
                 return new ProductCreated(id);

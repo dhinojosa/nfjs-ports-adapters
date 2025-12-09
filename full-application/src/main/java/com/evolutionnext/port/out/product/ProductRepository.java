@@ -1,4 +1,4 @@
-package com.evolutionnext.application.port.out;
+package com.evolutionnext.port.out.product;
 
 import com.evolutionnext.domain.aggregates.product.Product;
 import com.evolutionnext.domain.aggregates.product.ProductId;

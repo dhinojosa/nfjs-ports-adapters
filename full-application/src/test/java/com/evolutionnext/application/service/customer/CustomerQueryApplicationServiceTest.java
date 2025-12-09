@@ -1,6 +1,6 @@
 package com.evolutionnext.application.service.customer;
 
-import com.evolutionnext.application.port.out.CustomerRepository;
+import com.evolutionnext.port.out.customer.CustomerRepository;
 import com.evolutionnext.application.results.customer.query.CustomerFound;
 import com.evolutionnext.application.results.customer.query.CustomerListFound;
 import com.evolutionnext.application.results.customer.query.CustomerNotFound;

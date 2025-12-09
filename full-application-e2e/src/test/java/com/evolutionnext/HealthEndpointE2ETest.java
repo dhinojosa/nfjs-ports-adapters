@@ -31,7 +31,8 @@ public class HealthEndpointE2ETest {
     private static final Map<String, String> env;
 
     static {
-        InputStream inputStream = HealthEndpointE2ETest.class.getClassLoader().getResourceAsStream(ENV_FILE);
+        InputStream inputStream = HealthEndpointE2ETest.class.
+            getClassLoader().getResourceAsStream(ENV_FILE);
         if (inputStream == null) {
             throw new RuntimeException("Could not find " + ENV_FILE);
         }

@@ -1,9 +1,9 @@
 package com.evolutionnext.application.service.customer;
 
 
-import com.evolutionnext.application.port.out.CustomerRepository;
-import com.evolutionnext.application.port.out.OrderRepository;
-import com.evolutionnext.application.port.out.ProductRepository;
+import com.evolutionnext.port.out.customer.CustomerRepository;
+import com.evolutionnext.port.out.order.OrderRepository;
+import com.evolutionnext.port.out.product.ProductRepository;
 import com.evolutionnext.application.results.customer.query.CustomerFound;
 import com.evolutionnext.application.results.customer.query.CustomerQueryResult;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
@@ -16,7 +16,6 @@ import com.evolutionnext.domain.aggregates.order.Order;
 import net.datafaker.Faker;
 import net.jqwik.api.*;
 import net.jqwik.api.arbitraries.ListArbitrary;
-import net.jqwik.api.constraints.Positive;
 import net.jqwik.api.lifecycle.BeforeTry;
 import net.jqwik.api.Tuple;
 import net.jqwik.testcontainers.Container;

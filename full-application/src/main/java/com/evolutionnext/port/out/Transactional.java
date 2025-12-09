@@ -1,4 +1,4 @@
-package com.evolutionnext.application.port.out;
+package com.evolutionnext.port.out;
 
 import java.util.function.Supplier;
 

@@ -1,5 +1,9 @@
 package com.evolutionnext.application.commands.product;
 
 
-public sealed interface ProductCommand permits CreateProduct {
+import java.math.BigDecimal;
+
+public sealed interface ProductCommand permits ProductCommand.CreateProduct {
+    public record CreateProduct(String name, BigDecimal price) implements ProductCommand {
+    }
 }
