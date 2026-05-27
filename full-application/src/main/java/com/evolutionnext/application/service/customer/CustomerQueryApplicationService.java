@@ -10,7 +10,7 @@ import com.evolutionnext.application.results.customer.query.CustomerListFound;
 import com.evolutionnext.application.results.customer.query.CustomerNotFound;
 import com.evolutionnext.application.results.customer.query.CustomerQueryResult;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
-import com.evolutionnext.dto.customer.CustomerData;
+import com.evolutionnext.application.results.customer.query.CustomerData;
 
 import java.util.List;
 

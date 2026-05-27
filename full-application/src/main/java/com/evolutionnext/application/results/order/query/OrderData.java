@@ -1,4 +1,4 @@
-package com.evolutionnext.dto.order;
+package com.evolutionnext.application.results.order.query;
 
 
 import com.evolutionnext.domain.aggregates.customer.CustomerId;

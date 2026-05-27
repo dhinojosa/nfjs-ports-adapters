@@ -11,7 +11,7 @@ import com.evolutionnext.application.results.order.query.OrderFindSuccess;
 import com.evolutionnext.application.results.order.query.OrderNotFound;
 import com.evolutionnext.domain.aggregates.customer.CustomerId;
 import com.evolutionnext.domain.aggregates.order.OrderId;
-import com.evolutionnext.dto.order.OrderData;
+import com.evolutionnext.application.results.order.query.OrderData;
 
 public class OrderQueryApplicationService implements ForClientOrderQueryPort {
     private final OrderRepository orderRepository;
