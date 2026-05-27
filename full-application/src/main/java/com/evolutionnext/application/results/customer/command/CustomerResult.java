@@ -1,5 +1,9 @@
 package com.evolutionnext.application.results.customer.command;
 
 
-public sealed interface CustomerResult permits CustomerCreated {
+import com.evolutionnext.domain.aggregates.customer.CustomerId;
+
+public sealed interface CustomerResult permits CustomerResult.CustomerCreated {
+    record CustomerCreated(CustomerId customerId) implements CustomerResult {
+    }
 }

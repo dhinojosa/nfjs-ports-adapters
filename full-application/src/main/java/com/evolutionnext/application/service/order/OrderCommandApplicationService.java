@@ -33,8 +33,10 @@ public class OrderCommandApplicationService implements
     @Override
     public ClientOrderResult execute(ClientOrderCommand command) {
         return switch (command) {
-            case ClientOrderCommand.InitializeOrder initializeOrder -> processOrder(initializeOrder);
-            case ClientOrderCommand.AddOrderItem addOrderItem -> addOrderItem(addOrderItem);
+            case ClientOrderCommand.InitializeOrder initializeOrder ->
+                processOrder(initializeOrder);
+            case ClientOrderCommand.AddOrderItem addOrderItem ->
+                addOrderItem(addOrderItem);
             case CancelOrder cancelOrder -> transactional.transactionally(() -> {
                 Order order = orderRepository.load(cancelOrder.orderId())
                     .orElseThrow(() -> new RuntimeException("Order not found"));

@@ -2,7 +2,6 @@ package com.evolutionnext.application.service.customer;
 
 
 import com.evolutionnext.application.commands.customer.CustomerCommand;
-import com.evolutionnext.application.results.customer.command.CustomerCreated;
 import com.evolutionnext.application.results.customer.command.CustomerResult;
 import com.evolutionnext.domain.aggregates.customer.Customer;
 import com.evolutionnext.port.in.customer.ForClientCustomerCommandPort;
@@ -23,12 +22,13 @@ public class CustomerCommandApplicationService implements ForClientCustomerComma
     @Override
     public CustomerResult execute(CustomerCommand command) {
         return switch (command) {
-            case CustomerCommand.CreateCustomer createCustomer -> transactional.transactionally(() -> {
+            case CustomerCommand.CreateCustomer createCustomer ->
+                transactional.transactionally(() -> {
                 var customer = new Customer(createCustomer.customerId(),
                     createCustomer.name(),
                     createCustomer.creditLimit());
                 customerRepository.save(customer);
-                return new CustomerCreated(customer.id());
+                return new CustomerResult.CustomerCreated(customer.id());
             });
         };
     }
