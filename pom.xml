@@ -24,9 +24,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <avro.version>1.10.2</avro.version>
         <confluent.version>5.0.0</confluent.version>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.source>26</maven.compiler.source>
+        <maven.compiler.target>26</maven.compiler.target>
+        <maven.compiler.release>26</maven.compiler.release>
         <maven.compiler.args>--enable-preview</maven.compiler.args>
     </properties>
     <dependencyManagement>
